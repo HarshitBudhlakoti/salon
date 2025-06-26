@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import logo from '../assets/logo.png';
 
 const links = [
   { id: 'home', label: 'Home' },
@@ -10,6 +11,8 @@ const links = [
 
 export default function Header() {
   const [active, setActive] = useState('home');
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,6 +25,7 @@ export default function Header() {
         }
       }
       setActive(current);
+      setScrolled(window.scrollY > 0);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -31,23 +35,65 @@ export default function Header() {
     const section = document.getElementById(id);
     if (section) {
       section.scrollIntoView({ behavior: 'smooth' });
+      setMenuOpen(false);
     }
   };
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-transparent backdrop-blur-md shadow-md transition-all">
-      <nav className="flex justify-between md:justify-center items-center px-1 md:px-0 gap-2 md:gap-8 py-2 md:py-4 w-full max-w-screen min-w-[340px]">
-        {links.map(link => (
-          <motion.a
-            key={link.id}
-            onClick={() => handleClick(link.id)}
-            className={`flex-1 text-center cursor-pointer px-1 py-2 md:px-4 md:py-2 rounded-lg transition-colors duration-300 font-semibold text-xs md:text-lg ${active === link.id ? 'bg-blue-600 text-white shadow-md' : 'text-gray-800'}`}
-            whileTap={{ scale: 0.95 }}
-            whileHover={{ scale: 1.08 }}
+    <header className={`fixed top-0 left-0 w-full z-50 ${scrolled ? 'bg-green-600/70 backdrop-blur-md' : 'bg-green-600/40 backdrop-blur-sm'} shadow-md transition-all transition-blur`}>
+      <nav className="flex justify-between items-center px-4 py-2 w-full max-w-screen min-w-[340px]">
+        {/* Logo */}
+        <div className="flex items-center gap-2">
+          <img src={logo} alt="Logo" className="h-10 w-10 object-contain rounded-full bg-white/80 p-1 shadow" />
+          <span className="hidden md:inline font-bold text-white text-lg">Salon</span>
+        </div>
+        {/* Desktop Links */}
+        <div className="hidden md:flex gap-8 flex-1 justify-center">
+          {links.map(link => (
+            <motion.a
+              key={link.id}
+              onClick={() => handleClick(link.id)}
+              className={`cursor-pointer px-4 py-2 rounded-lg transition-colors duration-300 font-semibold text-lg ${active === link.id ? 'bg-white/80 text-green-700 shadow-md' : 'text-white hover:bg-white/30'}`}
+              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.08 }}
+            >
+              {link.label}
+            </motion.a>
+          ))}
+        </div>
+        {/* Hamburger Icon for Mobile */}
+        <div className="md:hidden flex items-center">
+          <button
+            className="p-2 rounded focus:outline-none focus:ring-2 focus:ring-white"
+            onClick={() => setMenuOpen(m => !m)}
+            aria-label="Open menu"
           >
-            {link.label}
-          </motion.a>
-        ))}
+            <span className="block w-6 h-0.5 bg-white mb-1 rounded transition-all" style={{ transform: menuOpen ? 'rotate(45deg) translateY(7px)' : 'none' }} />
+            <span className={`block w-6 h-0.5 bg-white mb-1 rounded transition-all ${menuOpen ? 'opacity-0' : ''}`} />
+            <span className="block w-6 h-0.5 bg-white rounded transition-all" style={{ transform: menuOpen ? 'rotate(-45deg) translateY(-7px)' : 'none' }} />
+          </button>
+        </div>
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="absolute top-full right-2 mt-2 w-48 bg-white/95 rounded-lg shadow-lg flex flex-col py-2 z-50 md:hidden"
+            >
+              {links.map(link => (
+                <button
+                  key={link.id}
+                  onClick={() => handleClick(link.id)}
+                  className={`text-left px-6 py-3 font-semibold text-green-700 rounded-lg transition-colors duration-200 ${active === link.id ? 'bg-green-100' : 'hover:bg-green-50'}`}
+                >
+                  {link.label}
+                </button>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
     </header>
   );
