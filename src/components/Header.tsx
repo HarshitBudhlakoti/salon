@@ -35,13 +35,13 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-white/10 backdrop-blur-md shadow-md transition-all">
+    <header className="fixed top-0 left-0 w-full z-50 bg-transparent backdrop-blur-md shadow-md transition-all">
       <nav className="flex justify-between md:justify-center items-center px-1 md:px-0 gap-2 md:gap-8 py-2 md:py-4 w-full max-w-screen min-w-[340px]">
         {links.map(link => (
           <motion.a
             key={link.id}
             onClick={() => handleClick(link.id)}
-            className={`flex-1 text-center cursor-pointer px-1 py-2 md:px-4 md:py-2 rounded-lg transition-colors duration-300 font-semibold text-xs md:text-lg ${active === link.id ? 'bg-blue-600 text-white shadow-md' : 'text-gray-800 hover:bg-blue-100 active:bg-blue-200'}`}
+            className={`flex-1 text-center cursor-pointer px-1 py-2 md:px-4 md:py-2 rounded-lg transition-colors duration-300 font-semibold text-xs md:text-lg ${active === link.id ? 'bg-blue-600 text-white shadow-md' : 'text-gray-800'}`}
             whileTap={{ scale: 0.95 }}
             whileHover={{ scale: 1.08 }}
           >
