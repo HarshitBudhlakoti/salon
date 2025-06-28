@@ -125,7 +125,7 @@ const OurServices = () => {
   }, [current]);
 
   return (
-    <section id="our-services" className="min-h-screen pt-5 pb-20 bg-white">
+    <section id="our-services" className="min-h-screen pt-5 pb-20 bg-gray-50">
       <div className="mx-auto max-w-2xl ">
         {/* Header */}
         <div className="text-center px-4">
@@ -135,7 +135,7 @@ const OurServices = () => {
           </p>
         </div>
         {/* Slider Container */}
-        <div className="relative flex justify-center items-center min-h-[360px] mt-5 overflow-hidden">
+        <div className="relative flex justify-center items-center min-h-[400px] mt-5 overflow-hidden">
           <div
             ref={cardRef}
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] max-w-md flex justify-center items-center md:w-full"
