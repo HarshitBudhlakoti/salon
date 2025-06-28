@@ -153,9 +153,9 @@ export default function Home() {
         </AnimatePresence>
       </div>
       {/* Heading and Tagline filling the remaining space */}
-      <div className="flex-1 w-full flex flex-col justify-center items-center py-2 z-10 relative">
+      <div className="flex-1 w-full flex flex-col justify-center items-center z-10 relative">
         <div className="flex flex-col items-center justify-center w-full h-full">
-          <h1 ref={taryaRef} className="font-mono font-bold text-7xl glossy-text mb-2 text-center opacity-0">
+          <h1 ref={taryaRef} className="font-mono font-bold text-7xl glossy-text pb-2 text-center opacity-0">
             Tarya
           </h1>
           <h2 ref={salonStudioRef} className="font-mono font-bold text-3xl glossy-text text-center opacity-0">
