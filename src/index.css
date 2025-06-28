@@ -55,3 +55,18 @@
   pointer-events: none;
   z-index: 0;
 }
+
+/* Performance optimizations for icons animation */
+.icons-container {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .icons-container {
+    animation: none !important;
+    transition: none !important;
+  }
+}
