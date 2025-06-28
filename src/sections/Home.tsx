@@ -29,7 +29,6 @@ export default function Home() {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
   const [taglineIdx, setTaglineIdx] = useState(0);
-  const [scrollY, setScrollY] = useState(0);
   const [lastScrollY, setLastScrollY] = useState(0);
   const taglines = [
     'Where Beauty Meets Artistry',
@@ -153,7 +152,6 @@ export default function Home() {
       const currentScrollY = window.scrollY;
       const scrollDirection = currentScrollY > lastScrollY ? 1 : -1;
       
-      setScrollY(currentScrollY);
       setLastScrollY(currentScrollY);
 
       // Animate icons based on scroll direction
