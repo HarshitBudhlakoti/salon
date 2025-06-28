@@ -188,7 +188,7 @@ export default function Home() {
         >
           {/* Multiple sets for seamless infinite loop */}
           {Array.from({ length: 4 }, (_, setIndex) => (
-            <div key={`set-${setIndex}`} className="flex gap-5 pt-5 my-auto">
+            <div key={`set-${setIndex}`} className="flex gap-5 pt-5">
               {[
                 { icon: faScissors, name: 'scissors' },
                 { icon: faSprayCan, name: 'sprayCan' },

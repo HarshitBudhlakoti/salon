@@ -82,6 +82,8 @@ const OurServices = () => {
   const [current, setCurrent] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const paragraphRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
     // Animate in the current card
@@ -124,13 +126,39 @@ const OurServices = () => {
     };
   }, [current]);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          if (entry.target === headingRef.current) {
+            gsap.fromTo(headingRef.current, 
+              { y: 50, opacity: 0 }, 
+              { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out' }
+            );
+          }
+          if (entry.target === paragraphRef.current) {
+            gsap.fromTo(paragraphRef.current, 
+              { y: 30, opacity: 0 }, 
+              { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out', delay: 0.2 }
+            );
+          }
+        }
+      });
+    }, { threshold: 0.3 });
+
+    if (headingRef.current) observer.observe(headingRef.current);
+    if (paragraphRef.current) observer.observe(paragraphRef.current);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="our-services" className="min-h-screen pt-5 pb-20 bg-gray-50">
+    <section id="our-services" className="min-h-screen pt-8 pb-20 bg-gray-50">
       <div className="mx-auto max-w-2xl ">
         {/* Header */}
         <div className="text-center px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 text-green-700">Our Services</h1>
-          <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
+          <h1 ref={headingRef} className="text-4xl md:text-5xl font-bold mb-6 text-green-700 opacity-0">Our Services</h1>
+          <p ref={paragraphRef} className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto opacity-0">
             Discover our comprehensive range of professional hair and beauty services designed to enhance your natural beauty.
           </p>
         </div>
