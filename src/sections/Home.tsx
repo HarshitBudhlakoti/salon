@@ -38,11 +38,13 @@ export default function Home() {
   ];
   const taglineRef = useRef<HTMLParagraphElement | null>(null);
   const iconsContainerRef = useRef<HTMLDivElement | null>(null);
-
-  // GSAP refs for h1s
-  const h1Refs = useRef<(HTMLHeadingElement | null)[]>([]);
-  const imgRef = useRef<HTMLImageElement | null>(null);
   const iconsSliderRef = useRef<HTMLDivElement | null>(null);
+  const imageSliderRef = useRef<HTMLDivElement | null>(null);
+  // New refs for animated elements
+  const taryaRef = useRef<HTMLHeadingElement | null>(null);
+  const salonStudioRef = useRef<HTMLHeadingElement | null>(null);
+  const lineTopRef = useRef<HTMLSpanElement | null>(null);
+  const lineBottomRef = useRef<HTMLSpanElement | null>(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -52,72 +54,15 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  // GSAP animation for h1s and icons slider
+  // GSAP entrance animation for headings, lines, tagline, and icon bar
   useEffect(() => {
-    if (h1Refs.current.length) {
-      gsap.set(h1Refs.current, { opacity: 0, x: -60 });
-      gsap.set(imgRef.current, { opacity: 0, x: 60 });
-      gsap.set(taglineRef.current, { opacity: 0 });
-      gsap.set(iconsSliderRef.current, { opacity: 0, y: 30 });
-      
-      const tl = gsap.timeline();
-      tl.to([h1Refs.current[0], iconsSliderRef.current], {
-        opacity: 1,
-        x: 0,
-        y: 0,
-        duration: 0.8,
-        ease: 'power2.out',
-      })
-        .to(h1Refs.current[1], {
-          opacity: 1,
-          x: 0,
-          duration: 0.8,
-          ease: 'power2.out',
-        }, 0.25)
-        .to(imgRef.current, {
-          opacity: 1,
-          x: 0,
-          duration: 0.8,
-          ease: 'power2.out',
-        }, 0.25)
-        .to(h1Refs.current[2], {
-          opacity: 1,
-          x: 0,
-          duration: 0.8,
-          ease: 'power2.out',
-        }, 0.5)
-        .to(taglineRef.current, {
-          opacity: 1,
-          duration: 0.7,
-          ease: 'power2.out',
-        }, "+=0.1");
-    }
-
-    // Teeter animation on scroll
-    let teeterTimeout: NodeJS.Timeout | null = null;
-    const handleScroll = () => {
-      if (!imgRef.current) return;
-      // Debounce: only trigger if not already animating
-      if (teeterTimeout) return;
-      gsap.to(imgRef.current, {
-        rotation: 10,
-        duration: 0.15,
-        yoyo: true,
-        repeat: 1,
-        ease: 'power1.inOut',
-        onComplete: () => {
-          gsap.to(imgRef.current, { rotation: 0, duration: 0.1 });
-        }
-      });
-      teeterTimeout = setTimeout(() => {
-        teeterTimeout = null;
-      }, 350); // Prevent spamming
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (teeterTimeout) clearTimeout(teeterTimeout);
-    };
+    const tl = gsap.timeline();
+    tl.fromTo(taryaRef.current, { x: -80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8, ease: 'power2.out' })
+      .fromTo(salonStudioRef.current, { x: 80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8, ease: 'power2.out' }, '-=0.5')
+      .fromTo(lineTopRef.current, { x: -100, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }, '-=0.4')
+      .fromTo(lineBottomRef.current, { x: 100, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }, '-=0.4')
+      .to(taglineRef.current, { opacity: 1, duration: 0.7, ease: 'power2.out' }, '+=0.1')
+      .fromTo(iconsSliderRef.current, { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power2.out' }, '-=0.4');
   }, []);
 
   useEffect(() => {
@@ -183,10 +128,17 @@ export default function Home() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
+  useEffect(() => {
+    // Fade in image slider on mount
+    if (imageSliderRef.current) {
+      gsap.fromTo(imageSliderRef.current, { opacity: 0 }, { opacity: 1, duration: 1.1, ease: 'power2.out' });
+    }
+  }, []);
+
   return (
     <section id="home" className="w-full min-h-screen flex flex-col overflow-hidden relative">
       {/* Top 50%: Image Slider */}
-      <div className="relative w-full h-[50vh] min-h-[200px] z-10 bg-white">
+      <div ref={imageSliderRef} className="relative w-full h-[50vh] min-h-[200px] z-10 bg-white opacity-0">
         <AnimatePresence initial={false} custom={direction}>
           <motion.img
             key={current}
@@ -201,63 +153,59 @@ export default function Home() {
         </AnimatePresence>
       </div>
       {/* Heading and Tagline filling the remaining space */}
-      <div className="flex-1 w-full flex flex-col py-2 z-10 relative">
-        <div className='flex flex-col gap-4 p-4'>
-          <div className='flex items-center'>
-            <div className="space-y-4">
-              <h1 ref={el => { h1Refs.current[0] = el; }} className='font-mono font-bold text-6xl' style={{ textShadow: '0 0 0 2px #86efac, 0 0 0 4px #86efac' }}>Tarya</h1>
-              <h1 ref={el => { h1Refs.current[1] = el; }} className='font-mono font-bold text-5xl' style={{ textShadow: '0 0 0 2px #86efac, 0 0 0 4px #86efac' }}>Salon</h1>
-            </div>
-            <div className='w-full'>
-              <img ref={imgRef} src="https://ik.imagekit.io/0mx6y4v8p/graph.webp" alt="Graph" className="w-36 mx-auto" />
-            </div>
-          </div>
-          <h1 ref={el => { h1Refs.current[2] = el; }} className='font-mono font-bold text-5xl' style={{ textShadow: '0 0 0 2px #86efac, 0 0 0 4px #86efac' }}>and Studio</h1>
+      <div className="flex-1 w-full flex flex-col justify-center items-center py-2 z-10 relative">
+        <div className="flex flex-col items-center justify-center w-full h-full">
+          <h1 ref={taryaRef} className="font-mono font-bold text-7xl glossy-text mb-2 text-center opacity-0">
+            Tarya
+          </h1>
+          <h2 ref={salonStudioRef} className="font-mono font-bold text-3xl glossy-text text-center opacity-0">
+            Salon and Studio
+          </h2>
         </div>
+      </div>
 
-        <span className="h-0.5 bg-green-700 mx-10 mb-2 mt-4 rounded-2xl"></span>
+      <span ref={lineTopRef} className="h-0.5 bg-green-700 mx-10 mb-2 mt-4 rounded-2xl opacity-0"></span>
 
-        <p
-          ref={taglineRef}
-          className="text-md md:text-2xl font-medium text-emerald-800 italic text-center"
-          style={{ display: 'inline-block', perspective: '400px' }}
+      <p
+        ref={taglineRef}
+        className="text-md md:text-2xl font-medium text-emerald-800 italic text-center opacity-0"
+        style={{ display: 'inline-block', perspective: '400px' }}
+      >
+        {taglines[taglineIdx]}
+      </p>
+     
+      <span ref={lineBottomRef} className="h-0.5 bg-green-700 mx-6 my-2 rounded-2xl opacity-0"></span>
+      
+      {/* Simple horizontal icons loop */}
+      <div ref={iconsSliderRef} className="overflow-hidden my-4 opacity-0">
+        <div 
+          ref={iconsContainerRef}
+          className="flex gap-6 whitespace-nowrap items-center"
+          style={{ 
+            width: 'max-content',
+            transform: 'translateX(0px)'
+          }}
         >
-          {taglines[taglineIdx]}
-        </p>
-       
-        <span className="h-0.5 bg-green-700 mx-6 my-2 rounded-2xl"></span>
-        
-        {/* Simple horizontal icons loop */}
-        <div ref={iconsSliderRef} className="overflow-hidden my-4">
-          <div 
-            ref={iconsContainerRef}
-            className="flex gap-6 whitespace-nowrap items-center"
-            style={{ 
-              width: 'max-content',
-              transform: 'translateX(0px)'
-            }}
-          >
-            {/* Multiple sets for seamless infinite loop */}
-            {Array.from({ length: 4 }, (_, setIndex) => (
-              <div key={`set-${setIndex}`} className="flex gap-5 pt-5">
-                {[
-                  { icon: faScissors, name: 'scissors' },
-                  { icon: faSprayCan, name: 'sprayCan' },
-                  { icon: faPaintBrush, name: 'paintBrush' },
-                  { icon: faHeart, name: 'lipstick' },
-                  { icon: faPalette, name: 'nailPolish' },
-                  { icon: faShower, name: 'shower' },
-                  { icon: faFan, name: 'hairDryer' },
-                ].map((iconData, index) => (
-                  <FontAwesomeIcon 
-                    key={`${setIndex}-${index}`}
-                    icon={iconData.icon} 
-                    className="text-4xl text-emerald-800" 
-                  />
-                ))}
-              </div>
-            ))}
-          </div>
+          {/* Multiple sets for seamless infinite loop */}
+          {Array.from({ length: 4 }, (_, setIndex) => (
+            <div key={`set-${setIndex}`} className="flex gap-5 pt-5">
+              {[
+                { icon: faScissors, name: 'scissors' },
+                { icon: faSprayCan, name: 'sprayCan' },
+                { icon: faPaintBrush, name: 'paintBrush' },
+                { icon: faHeart, name: 'lipstick' },
+                { icon: faPalette, name: 'nailPolish' },
+                { icon: faShower, name: 'shower' },
+                { icon: faFan, name: 'hairDryer' },
+              ].map((iconData, index) => (
+                <FontAwesomeIcon 
+                  key={`${setIndex}-${index}`}
+                  icon={iconData.icon} 
+                  className="text-4xl text-emerald-800" 
+                />
+              ))}
+            </div>
+          ))}
         </div>
       </div>
     </section>

@@ -1,3 +1,5 @@
+import { motion } from 'framer-motion';
+
 interface ServiceCardProps {
   image: string;
   title: string;
@@ -5,11 +7,17 @@ interface ServiceCardProps {
   delay?: number;
 }
 
-const ServiceCard = ({ image, title, description }: ServiceCardProps) => {
+const ServiceCard = ({ image, title, description, delay = 0 }: ServiceCardProps) => {
   return (
-    <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 w-[70vw] max-w-sm h-full max-h-96">
+    <motion.div
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      transition={{ duration: 0.6, delay }}
+      viewport={{ once: true }}
+      className="bg-white/90 backdrop-blur-sm rounded-3xl overflow-hidden transition-all duration-300 w-full"
+    >
       {/* Image Container */}
-      <div className="relative h-40 overflow-hidden">
+      <div className="relative h-48 overflow-hidden">
         <img
           src={image}
           alt={title}
@@ -22,9 +30,9 @@ const ServiceCard = ({ image, title, description }: ServiceCardProps) => {
       {/* Content Container */}
       <div className="p-6">
         <h3 className="text-xl font-bold text-green-700 mb-3">{title}</h3>
-        <p className="text-base text-gray-600 leading-relaxed">{description}</p>
+        <p className="text-gray-600 leading-relaxed">{description}</p>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

@@ -2,16 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Metallic Green Gradient - Lighter */
+/* Metallic Light Slate Gradient */
 .metallic-green-gradient {
   background: linear-gradient(
     135deg,
-    #f0fdf4 0%,
-    #dcfce7 20%,
-    #bbf7d0 40%,
-    #86efac 60%,
-    #4ade80 80%,
-    #22c55e 100%
+    #fafafa 0%,   /* gray-50 - slightly darker than white */
+    #f5f5f5 25%,  /* gray-100 */
+    #e5e5e5 50%,  /* gray-200 */
+    #d4d4d4 75%,  /* gray-300 */
+    #a3a3a3 100%  /* gray-400 */
   );
   background-attachment: fixed;
   min-height: 100vh;
@@ -69,4 +68,40 @@
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* Glossy gold text animation */
+.glossy-text {
+  position: relative;
+  display: inline-block;
+  background: linear-gradient(90deg, #FFD700 0%, #FFC300 30%, #B8860B 50%, #FFC300 70%, #FFD700 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: glossy-move 5s linear infinite;
+}
+
+@keyframes glossy-move {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+.text-outline-green {
+  text-shadow:
+    0 0 2px #15803d,
+    0 0 2px #15803d,
+    0 0 2px #15803d,
+    0 0 2px #15803d;
+}
+
+.text-outline-gold {
+  text-shadow:
+    0 0 4px #FFD700,
+    0 0 4px #FFD700,
+    2px 2px 4px #FFD700,
+    -2px -2px 4px #FFD700;
 }

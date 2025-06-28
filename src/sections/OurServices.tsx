@@ -79,107 +79,72 @@ const servicesData = [
 ];
 
 const OurServices = () => {
-  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [current, setCurrent] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
-  const timelineRef = useRef<gsap.core.Timeline | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    const startContinuousAnimation = () => {
-      const card = cardRef.current;
-      if (!card) return;
-
-      // Kill any existing timeline
-      if (timelineRef.current) {
-        timelineRef.current.kill();
+    // Animate in the current card
+    if (cardRef.current) {
+      gsap.set(cardRef.current, { x: 200, opacity: 0 });
+      gsap.to(cardRef.current, { x: 0, opacity: 1, duration: 0.7, ease: 'power2.out' });
+    }
+    // Set up timer for next card
+    timeoutRef.current = setTimeout(() => {
+      // Animate out current card
+      if (cardRef.current) {
+        gsap.to(cardRef.current, {
+          x: -200,
+          opacity: 0,
+          duration: 0.7,
+          ease: 'power2.in',
+          onComplete: () => {
+            // If we're at the last card, immediately animate in the first card
+            setCurrent((prev) => {
+              if (prev + 1 === servicesData.length) {
+                // Instantly set to first card and animate in
+                setTimeout(() => {
+                  if (cardRef.current) {
+                    gsap.set(cardRef.current, { x: 200, opacity: 0 });
+                    gsap.to(cardRef.current, { x: 0, opacity: 1, duration: 0.7, ease: 'power2.out' });
+                  }
+                }, 10);
+                return 0;
+              }
+              return prev + 1;
+            });
+          }
+        });
+      } else {
+        setCurrent((prev) => (prev + 1) % servicesData.length);
       }
-
-      // Create a new timeline
-      const tl = gsap.timeline({ repeat: -1 });
-      timelineRef.current = tl;
-
-      // Set initial position (off-screen right)
-      gsap.set(card, {
-        x: window.innerWidth,
-        opacity: 0,
-        scale: 0.8
-      });
-
-      // Animate card coming in from right to center
-      tl.to(card, {
-        x: 0,
-        opacity: 1,
-        scale: 1,
-        duration: 0.8,
-        ease: "power2.out"
-      });
-
-      // Keep card centered briefly
-      tl.to(card, {
-        duration: 1
-      }, "+=0");
-
-      // Animate card going out to the left and simultaneously prepare next card
-      tl.to(card, {
-        x: -window.innerWidth,
-        opacity: 0,
-        scale: 0.5,
-        duration: 0.8,
-        ease: "power2.in",
-        onComplete: () => {
-          setCurrentCardIndex((prevIndex) => (prevIndex + 1) % servicesData.length);
-        }
-      });
-    };
-
-    startContinuousAnimation();
-
+    }, 1000);
     return () => {
-      if (timelineRef.current) {
-        timelineRef.current.kill();
-      }
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, []);
-
-  useEffect(() => {
-    const card = cardRef.current;
-    if (!card) return;
-
-    // Immediately animate the new card from right to center
-    gsap.fromTo(card, 
-      {
-        x: window.innerWidth,
-        opacity: 0,
-        scale: 0.5
-      },
-      {
-        x: 0,
-        opacity: 1,
-        scale: 1,
-        duration: 0.8,
-        ease: "power2.out"
-      }
-    );
-  }, [currentCardIndex]);
+  }, [current]);
 
   return (
-    <section id="our-services" className="min-h-screen pt-5 pb-20 px-4 overflow-hidden">
-      <div className="mx-auto">
+    <section id="our-services" className="min-h-screen pt-5 pb-20 ">
+      <div className="mx-auto max-w-2xl ">
         {/* Header */}
-        <div className="text-center">
+        <div className="text-center px-4">
           <h1 className="text-4xl md:text-5xl font-bold mb-6 text-green-700">Our Services</h1>
           <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
             Discover our comprehensive range of professional hair and beauty services designed to enhance your natural beauty.
           </p>
         </div>
-
-        {/* Card Container */}
-        <div className="relative overflow-hidden h-[400px] flex items-center justify-center">
-          <div ref={cardRef} className="absolute w-[70vw] max-w-md">
+        {/* Slider Container */}
+        <div className="relative flex justify-center items-center min-h-[360px] mt-5 overflow-hidden">
+          <div
+            ref={cardRef}
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] max-w-md flex justify-center items-center md:w-full"
+            key={servicesData[current].id}
+          >
             <ServiceCard
-              image={servicesData[currentCardIndex].image}
-              title={servicesData[currentCardIndex].title}
-              description={servicesData[currentCardIndex].description}
-              delay={0}
+              image={servicesData[current].image}
+              title={servicesData[current].title}
+              description={servicesData[current].description}
             />
           </div>
         </div>
