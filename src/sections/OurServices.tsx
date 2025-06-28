@@ -84,6 +84,7 @@ const OurServices = () => {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const paragraphRef = useRef<HTMLParagraphElement>(null);
+  const hasAnimatedRef = useRef(false);
 
   useEffect(() => {
     // Animate in the current card
@@ -127,20 +128,26 @@ const OurServices = () => {
   }, [current]);
 
   useEffect(() => {
+    // Set initial positions
+    if (headingRef.current) {
+      gsap.set(headingRef.current, { y: 50, opacity: 0 });
+    }
+    if (paragraphRef.current) {
+      gsap.set(paragraphRef.current, { y: 30, opacity: 0 });
+    }
+
+    // Scroll-triggered animation
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          if (entry.target === headingRef.current) {
-            gsap.fromTo(headingRef.current, 
-              { y: 50, opacity: 0 }, 
-              { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out' }
-            );
+        if (entry.isIntersecting && !hasAnimatedRef.current && (entry.target === headingRef.current || entry.target === paragraphRef.current)) {
+          hasAnimatedRef.current = true;
+          
+          // Animate both elements together
+          if (headingRef.current) {
+            gsap.to(headingRef.current, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' });
           }
-          if (entry.target === paragraphRef.current) {
-            gsap.fromTo(paragraphRef.current, 
-              { y: 30, opacity: 0 }, 
-              { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out', delay: 0.2 }
-            );
+          if (paragraphRef.current) {
+            gsap.to(paragraphRef.current, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', delay: 0.2 });
           }
         }
       });
