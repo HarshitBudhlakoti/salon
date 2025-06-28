@@ -1,10 +1,6 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ServiceCard from '../components/ServiceCard';
-
-// Register ScrollTrigger plugin
-gsap.registerPlugin(ScrollTrigger);
 
 const IMAGES = {
   bridalMakeup: "https://mjgorgeous.com/wp-content/uploads/2020/12/MACost2.jpg",
@@ -83,99 +79,84 @@ const servicesData = [
 ];
 
 const OurServices = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<HTMLDivElement>(null);
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
   useEffect(() => {
-    const section = sectionRef.current;
-    const container = containerRef.current;
-    const cards = cardsRef.current;
+    const startContinuousAnimation = () => {
+      const card = cardRef.current;
+      if (!card) return;
 
-    if (!section || !container || !cards) return;
-
-    const cardWidth = window.innerWidth * 0.7; // 70vw
-    const gap = 32;
-    const totalWidth = (cardWidth + gap) * servicesData.length - gap;
-
-    // Initial offset: center the first card
-    const initialOffset = (window.innerWidth / 2) - (cardWidth / 2);
-    // Final offset: center the last card
-    const finalOffset = (window.innerWidth / 2) - (cardWidth / 2) - ((servicesData.length - 1) * (cardWidth + gap));
-    // Scroll distance is the positive difference between these two
-    const scrollDistance = initialOffset - finalOffset;
-
-    gsap.set(cards, {
-      width: totalWidth,
-      display: 'flex',
-      gap: gap + 'px',
-      x: initialOffset
-    });
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: 'top top',
-        end: `+=${scrollDistance}`,
-        pin: true,
-        scrub: 1,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          const progress = self.progress;
-          const currentScrollDistance = progress * scrollDistance;
-          const centerX = window.innerWidth / 2;
-          // Calculate the current main card index based on translation
-          const cardIndex = Math.round((initialOffset - currentScrollDistance) / -(cardWidth + gap));
-          const cardElements = cards.querySelectorAll('.service-card');
-          cardElements.forEach((card, index) => {
-            const cardLeft = index * (cardWidth + gap);
-            const cardCenter = initialOffset - currentScrollDistance + cardLeft + cardWidth / 2;
-            const distanceFromCenter = Math.abs(centerX - cardCenter);
-            const maxDistance = window.innerWidth / 2;
-            let scale = Math.max(0.8, 1 - (distanceFromCenter / maxDistance) * 0.2);
-            let opacity = Math.max(0.6, 1 - (distanceFromCenter / maxDistance) * 0.4);
-
-            // 3D curve effect
-            const isMainCard = Math.abs(index - cardIndex) < 0.5;
-            const isPreviousCard = index === Math.floor(cardIndex) - 1;
-            const isNextCard = index === Math.ceil(cardIndex) + 1;
-
-            if (isMainCard) {
-              scale = 1.0;
-              opacity = 1.0;
-            } else if (isPreviousCard || isNextCard) {
-              scale = 0.9;
-              opacity = 0.8;
-            } else {
-              scale = Math.max(0.7, 1 - (distanceFromCenter / maxDistance) * 0.3);
-              opacity = Math.max(0.4, 1 - (distanceFromCenter / maxDistance) * 0.6);
-            }
-
-            gsap.to(card, {
-              scale: scale,
-              opacity: opacity,
-              duration: 0.3,
-              ease: "power2.out"
-            });
-          });
-        }
+      // Kill any existing timeline
+      if (timelineRef.current) {
+        timelineRef.current.kill();
       }
-    });
 
-    tl.to(cards, {
-      x: finalOffset,
-      ease: 'none'
-    });
+      // Create a new timeline
+      const tl = gsap.timeline({ repeat: -1 });
+      timelineRef.current = tl;
+
+      // Set initial position (off-screen right)
+      gsap.set(card, {
+        x: window.innerWidth,
+        opacity: 0,
+        scale: 0.8
+      });
+
+      // Animate card coming in from right to center
+      tl.to(card, {
+        x: 0,
+        opacity: 1,
+        scale: 1,
+        duration: 1.2,
+        ease: "power2.out"
+      });
+
+      // Keep card centered for a while
+      tl.to(card, {
+        duration: 1.8
+      }, "+=0");
+
+      // Animate card going out to the left
+      tl.to(card, {
+        x: -window.innerWidth,
+        opacity: 0,
+        scale: 0.8,
+        duration: 1.2,
+        ease: "power2.in"
+      });
+
+      // Update card content and restart the cycle
+      tl.add(() => {
+        setCurrentCardIndex((prevIndex) => (prevIndex + 1) % servicesData.length);
+      });
+    };
+
+    startContinuousAnimation();
 
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      if (timelineRef.current) {
+        timelineRef.current.kill();
+      }
     };
   }, []);
 
+  useEffect(() => {
+    const card = cardRef.current;
+    if (!card) return;
+
+    // Update card content without restarting animation
+    gsap.set(card, {
+      x: window.innerWidth,
+      opacity: 0,
+      scale: 0.8
+    });
+  }, [currentCardIndex]);
+
   return (
-    <section ref={sectionRef} id="our-services" className="min-h-screen pt-5 pb-20 px-4 overflow-hidden">
-      <div className="max-w-7xl mx-auto">
+    <section id="our-services" className="min-h-screen pt-5 pb-20 px-4 overflow-hidden">
+      <div className="mx-auto">
         {/* Header */}
         <div className="text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6 text-green-700">Our Services</h1>
@@ -184,19 +165,15 @@ const OurServices = () => {
           </p>
         </div>
 
-        {/* Horizontal Scrolling Container */}
-        <div ref={containerRef} className="relative overflow-hidden h-[400px] flex items-center">
-          <div ref={cardsRef} className="relative">
-            {servicesData.map((service) => (
-              <div key={service.id} className="service-card flex-shrink-0">
-                <ServiceCard
-                  image={service.image}
-                  title={service.title}
-                  description={service.description}
-                  delay={0}
-                />
-              </div>
-            ))}
+        {/* Card Container */}
+        <div className="relative overflow-hidden h-[400px] flex items-center justify-center">
+          <div ref={cardRef} className="absolute w-[70vw] max-w-md">
+            <ServiceCard
+              image={servicesData[currentCardIndex].image}
+              title={servicesData[currentCardIndex].title}
+              description={servicesData[currentCardIndex].description}
+              delay={0}
+            />
           </div>
         </div>
       </div>
@@ -204,4 +181,4 @@ const OurServices = () => {
   );
 };
 
-export default OurServices; 
+export default OurServices;
