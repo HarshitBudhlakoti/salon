@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import logo from '../assets/logo.png';
 
 const links = [
   { id: 'home', label: 'Home' },
@@ -47,7 +46,7 @@ export default function Header() {
       <nav className="flex justify-between items-center px-4 py-2 w-full max-w-screen min-w-[340px]">
         {/* Logo */}
         <div className="flex items-center gap-2">
-          <img src={logo} alt="Logo" className="h-10 w-10 object-contain rounded-full bg-white/80 p-1 shadow" />
+          <img src="https://ik.imagekit.io/0mx6y4v8p/logo.webp" alt="Logo" className="h-10 w-10 object-contain rounded-full bg-white/80 p-1 shadow" />
           <span className="hidden md:inline font-bold text-white text-lg">Salon</span>
         </div>
         {/* Desktop Links */}

@@ -15,6 +15,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@imagekit/react": "^5.0.1",
     "framer-motion": "^12.19.1",
     "gsap": "^3.13.0",
     "locomotive-scroll": "^4.1.4",

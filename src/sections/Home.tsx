@@ -10,20 +10,18 @@ import {
   faShower, 
   faFan 
 } from '@fortawesome/free-solid-svg-icons';
-import image1 from '../assets/image.png';
-import s1 from '../assets/s1.jpg';
-import s2 from '../assets/s2.avif';
-import s3 from '../assets/s3.webp';
-import s5 from '../assets/s5.webp';
-import s6 from '../assets/s6.jpeg';
-import s7 from '../assets/s7.webp';
-import s8 from '../assets/s8.webp';
-import s9 from '../assets/s9.jpg';
-import s10 from '../assets/s10.jpg';
-import s11 from "../assets/graph.png";
 import gsap from 'gsap';
 
-const images = [image1, s1, s2, s3, s5, s6, s7, s8, s9, s10];
+const images = [
+  'https://ik.imagekit.io/0mx6y4v8p/s2.avif',
+  'https://ik.imagekit.io/0mx6y4v8p/s5.webp',
+  'https://ik.imagekit.io/0mx6y4v8p/s3.webp',
+  'https://ik.imagekit.io/0mx6y4v8p/s7.webp',
+  'https://ik.imagekit.io/0mx6y4v8p/s8.webp',
+  'https://ik.imagekit.io/0mx6y4v8p/s10.webp',
+  'https://ik.imagekit.io/0mx6y4v8p/s9.webp',
+  'https://ik.imagekit.io/0mx6y4v8p/image.webp'
+];
 
 export default function Home() {
   const [current, setCurrent] = useState(0);
@@ -188,7 +186,7 @@ export default function Home() {
   return (
     <section id="home" className="w-full min-h-screen flex flex-col overflow-hidden relative">
       {/* Top 50%: Image Slider */}
-      <div className="relative w-full h-[50vh] min-h-[200px] z-10">
+      <div className="relative w-full h-[50vh] min-h-[200px] z-10 bg-white">
         <AnimatePresence initial={false} custom={direction}>
           <motion.img
             key={current}
@@ -198,7 +196,7 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ opacity: { duration: 0.7, ease: 'easeInOut' } }}
+            transition={{ opacity: { duration: 0.8, ease: 'easeInOut' } }}
           />
         </AnimatePresence>
       </div>
@@ -211,7 +209,7 @@ export default function Home() {
               <h1 ref={el => { h1Refs.current[1] = el; }} className='font-mono font-bold text-5xl' style={{ textShadow: '0 0 0 2px #86efac, 0 0 0 4px #86efac' }}>Salon</h1>
             </div>
             <div className='w-full'>
-              <img ref={imgRef} src={s11} alt="Graph" className="w-36 mx-auto" />
+              <img ref={imgRef} src="https://ik.imagekit.io/0mx6y4v8p/graph.webp" alt="Graph" className="w-36 mx-auto" />
             </div>
           </div>
           <h1 ref={el => { h1Refs.current[2] = el; }} className='font-mono font-bold text-5xl' style={{ textShadow: '0 0 0 2px #86efac, 0 0 0 4px #86efac' }}>and Studio</h1>
@@ -226,7 +224,7 @@ export default function Home() {
         >
           {taglines[taglineIdx]}
         </p>
-
+       
         <span className="h-0.5 bg-green-700 mx-6 my-2 rounded-2xl"></span>
         
         {/* Simple horizontal icons loop */}
