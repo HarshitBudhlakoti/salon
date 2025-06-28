@@ -250,7 +250,7 @@ const OurServices = () => {
         
         {/* Package Cards - Mobile Only */}
         <div className="md:hidden">
-          <h2 ref={packagesHeadingRef} className="text-2xl font-bold mb-6 text-green-700 text-center opacity-0">Our Packages</h2>
+          <h2 ref={packagesHeadingRef} className="text-2xl font-bold mb-6 text-green-700 text-center opacity-0">Special Packages</h2>
           <div ref={packagesContainerRef} className="grid grid-cols-2 gap-4 px-4 opacity-0 items-stretch">
             {packageData.map((pkg, index) => (
               <PackageCard

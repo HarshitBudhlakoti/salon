@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface ServiceCardProps {
   image: string;
   title: string;
@@ -7,7 +5,7 @@ interface ServiceCardProps {
   delay?: number;
 }
 
-const ServiceCard = ({ image, title, description, delay = 0 }: ServiceCardProps) => {
+const ServiceCard = ({ image, title, description }: ServiceCardProps) => {
   return (
     <div className="bg-gray-200 shadow-lg rounded-3xl overflow-hidden transition-all duration-300 w-full max-w-[300px]">
       {/* Image Container */}
