@@ -153,7 +153,7 @@ export default function Home() {
         </AnimatePresence>
       </div>
       {/* Heading and Tagline filling the remaining space */}
-      <div className="flex-1 w-full flex flex-col justify-center items-center z-10 relative">
+      <div className="w-full flex flex-col justify-center items-center py-8 z-10 relative">
         <div className="flex flex-col items-center justify-center w-full h-full">
           <h1 ref={taryaRef} className="font-mono font-bold text-7xl glossy-text pb-2 text-center opacity-0">
             Tarya
@@ -164,17 +164,17 @@ export default function Home() {
         </div>
       </div>
 
-      <span ref={lineTopRef} className="h-0.5 bg-green-700 mx-10 mb-2 mt-4 rounded-2xl opacity-0"></span>
+      <span ref={lineTopRef} className="h-0.5 bg-green-700 mx-10 mb-4 mt-6 rounded-2xl opacity-0"></span>
 
       <p
         ref={taglineRef}
-        className="text-md md:text-2xl font-medium text-emerald-800 italic text-center opacity-0"
+        className="text-md md:text-2xl font-medium text-emerald-800 italic text-center opacity-0 my-4"
         style={{ display: 'inline-block', perspective: '400px' }}
       >
         {taglines[taglineIdx]}
       </p>
      
-      <span ref={lineBottomRef} className="h-0.5 bg-green-700 mx-6 my-2 rounded-2xl opacity-0"></span>
+      <span ref={lineBottomRef} className="h-0.5 bg-green-700 mx-6 my-4 rounded-2xl opacity-0"></span>
       
       {/* Simple horizontal icons loop */}
       <div ref={iconsSliderRef} className="overflow-hidden my-4 opacity-0">
@@ -188,7 +188,7 @@ export default function Home() {
         >
           {/* Multiple sets for seamless infinite loop */}
           {Array.from({ length: 4 }, (_, setIndex) => (
-            <div key={`set-${setIndex}`} className="flex gap-5 pt-5">
+            <div key={`set-${setIndex}`} className="flex gap-5 pt-5 my-auto">
               {[
                 { icon: faScissors, name: 'scissors' },
                 { icon: faSprayCan, name: 'sprayCan' },
