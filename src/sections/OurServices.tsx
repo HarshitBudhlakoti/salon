@@ -109,27 +109,25 @@ const OurServices = () => {
         x: 0,
         opacity: 1,
         scale: 1,
-        duration: 1.2,
+        duration: 0.8,
         ease: "power2.out"
       });
 
-      // Keep card centered for a while
+      // Keep card centered briefly
       tl.to(card, {
-        duration: 1.8
+        duration: 1
       }, "+=0");
 
-      // Animate card going out to the left
+      // Animate card going out to the left and simultaneously prepare next card
       tl.to(card, {
         x: -window.innerWidth,
         opacity: 0,
-        scale: 0.8,
-        duration: 1.2,
-        ease: "power2.in"
-      });
-
-      // Update card content and restart the cycle
-      tl.add(() => {
-        setCurrentCardIndex((prevIndex) => (prevIndex + 1) % servicesData.length);
+        scale: 0.5,
+        duration: 0.8,
+        ease: "power2.in",
+        onComplete: () => {
+          setCurrentCardIndex((prevIndex) => (prevIndex + 1) % servicesData.length);
+        }
       });
     };
 
@@ -146,12 +144,21 @@ const OurServices = () => {
     const card = cardRef.current;
     if (!card) return;
 
-    // Update card content without restarting animation
-    gsap.set(card, {
-      x: window.innerWidth,
-      opacity: 0,
-      scale: 0.8
-    });
+    // Immediately animate the new card from right to center
+    gsap.fromTo(card, 
+      {
+        x: window.innerWidth,
+        opacity: 0,
+        scale: 0.5
+      },
+      {
+        x: 0,
+        opacity: 1,
+        scale: 1,
+        duration: 0.8,
+        ease: "power2.out"
+      }
+    );
   }, [currentCardIndex]);
 
   return (
