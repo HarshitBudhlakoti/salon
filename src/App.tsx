@@ -6,15 +6,15 @@ import Contact from './sections/Contact'
 
 function App() {
   return (
-    <>
+    <div className="min-h-screen metallic-green-gradient">
       <Header />
-      <div className="">
+      <main className="relative">
         <Home />
-        <OurWork />
         <OurServices />
+        <OurWork />
         <Contact />
-      </div>
-    </>
+      </main>
+    </div>
   )
 }
 

@@ -1,5 +1,15 @@
 import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faScissors, 
+  faSprayCan, 
+  faPaintBrush, 
+  faHeart, 
+  faPalette, 
+  faShower, 
+  faFan 
+} from '@fortawesome/free-solid-svg-icons';
 import image1 from '../assets/image.png';
 import s1 from '../assets/s1.jpg';
 import s2 from '../assets/s2.avif';
@@ -19,6 +29,8 @@ export default function Home() {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
   const [taglineIdx, setTaglineIdx] = useState(0);
+  const [scrollY, setScrollY] = useState(0);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const taglines = [
     'Where Beauty Meets Artistry',
     'Unleash Your Inner Glow',
@@ -28,10 +40,12 @@ export default function Home() {
     'Experience the Art of Self-Care',
   ];
   const taglineRef = useRef<HTMLParagraphElement | null>(null);
+  const iconsContainerRef = useRef<HTMLDivElement | null>(null);
 
   // GSAP refs for h1s
   const h1Refs = useRef<(HTMLHeadingElement | null)[]>([]);
   const imgRef = useRef<HTMLImageElement | null>(null);
+  const iconsSliderRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -41,26 +55,40 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  // GSAP animation for h1s
+  // GSAP animation for h1s and icons slider
   useEffect(() => {
     if (h1Refs.current.length) {
       gsap.set(h1Refs.current, { opacity: 0, x: -60 });
       gsap.set(imgRef.current, { opacity: 0, x: 60 });
       gsap.set(taglineRef.current, { opacity: 0 });
+      gsap.set(iconsSliderRef.current, { opacity: 0, y: 30 });
+      
       const tl = gsap.timeline();
-      tl.to(h1Refs.current, {
+      tl.to([h1Refs.current[0], iconsSliderRef.current], {
         opacity: 1,
         x: 0,
+        y: 0,
         duration: 0.8,
-        stagger: 0.25,
         ease: 'power2.out',
       })
+        .to(h1Refs.current[1], {
+          opacity: 1,
+          x: 0,
+          duration: 0.8,
+          ease: 'power2.out',
+        }, 0.25)
         .to(imgRef.current, {
           opacity: 1,
           x: 0,
           duration: 0.8,
           ease: 'power2.out',
         }, 0.25)
+        .to(h1Refs.current[2], {
+          opacity: 1,
+          x: 0,
+          duration: 0.8,
+          ease: 'power2.out',
+        }, 0.5)
         .to(taglineRef.current, {
           opacity: 1,
           duration: 0.7,
@@ -119,16 +147,56 @@ export default function Home() {
     return () => clearInterval(flipInterval);
   }, []);
 
+  // Scroll handler for icons animation
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const scrollDirection = currentScrollY > lastScrollY ? 1 : -1;
+      
+      setScrollY(currentScrollY);
+      setLastScrollY(currentScrollY);
+
+      // Animate icons based on scroll direction
+      if (iconsContainerRef.current) {
+        const currentX = Number(gsap.getProperty(iconsContainerRef.current, 'x')) || 0;
+        const newX = currentX - (scrollDirection * 8); // Same speed for both directions
+        
+        // Improved infinite loop logic
+        const iconWidth = 60;
+        const totalIcons = 7;
+        const totalWidth = iconWidth * totalIcons;
+        
+        let finalX = newX;
+        
+        // Create seamless infinite loop - same logic for both directions
+        if (newX <= -totalWidth) {
+          finalX = newX + totalWidth;
+        } else if (newX >= 0) {
+          finalX = newX - totalWidth;
+        }
+        
+        gsap.to(iconsContainerRef.current, {
+          x: finalX,
+          duration: 0.3,
+          ease: 'power2.out'
+        });
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
+
   return (
-    <section id="home" className="w-full min-h-screen max-h-screen h-screen flex flex-col overflow-hidden relative bg-black">
-      {/* Top 45%: Image Slider */}
-      <div className="relative w-full h-[45%] min-h-[120px] max-h-[45vh]">
+    <section id="home" className="w-full min-h-screen flex flex-col overflow-hidden relative">
+      {/* Top 50%: Image Slider */}
+      <div className="relative w-full h-[50vh] min-h-[200px] z-10">
         <AnimatePresence initial={false} custom={direction}>
           <motion.img
             key={current}
             src={images[current]}
             alt={`slide-${current}`}
-            className="w-full h-full object-cover absolute top-0 left-0"
+            className="w-full h-full object-cover absolute top-0 left-0 z-20"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -137,21 +205,21 @@ export default function Home() {
         </AnimatePresence>
       </div>
       {/* Heading and Tagline filling the remaining space */}
-      <div className="flex-1 w-full flex flex-col bg-slate-200 py-2">
+      <div className="flex-1 w-full flex flex-col py-2 z-10 relative">
         <div className='flex flex-col gap-4 p-4'>
           <div className='flex items-center'>
             <div className="space-y-4">
-              <h1 ref={el => { h1Refs.current[0] = el; }} className='font-mono font-bold text-5xl underline'>Tarya</h1>
-              <h1 ref={el => { h1Refs.current[1] = el; }} className='font-mono font-bold text-5xl underline'>Salon</h1>
+              <h1 ref={el => { h1Refs.current[0] = el; }} className='font-mono font-bold text-6xl' style={{ textShadow: '0 0 0 2px #86efac, 0 0 0 4px #86efac' }}>Tarya</h1>
+              <h1 ref={el => { h1Refs.current[1] = el; }} className='font-mono font-bold text-5xl' style={{ textShadow: '0 0 0 2px #86efac, 0 0 0 4px #86efac' }}>Salon</h1>
             </div>
             <div className='w-full'>
               <img ref={imgRef} src={s11} alt="Graph" className="w-36 mx-auto" />
             </div>
           </div>
-          <h1 ref={el => { h1Refs.current[2] = el; }} className='font-mono font-bold text-5xl underline'>and Studio</h1>
+          <h1 ref={el => { h1Refs.current[2] = el; }} className='font-mono font-bold text-5xl' style={{ textShadow: '0 0 0 2px #86efac, 0 0 0 4px #86efac' }}>and Studio</h1>
         </div>
 
-        <span className="h-0.5 bg-green-700 mx-10 mb-2 mt-6 rounded-2xl"></span>
+        <span className="h-0.5 bg-green-700 mx-10 mb-2 mt-4 rounded-2xl"></span>
 
         <p
           ref={taglineRef}
@@ -162,9 +230,38 @@ export default function Home() {
         </p>
 
         <span className="h-0.5 bg-green-700 mx-6 my-2 rounded-2xl"></span>
-
-        <div id="hy">
-
+        
+        {/* Simple horizontal icons loop */}
+        <div ref={iconsSliderRef} className="overflow-hidden my-4">
+          <div 
+            ref={iconsContainerRef}
+            className="flex gap-6 whitespace-nowrap items-center"
+            style={{ 
+              width: 'max-content',
+              transform: 'translateX(0px)'
+            }}
+          >
+            {/* Multiple sets for seamless infinite loop */}
+            {Array.from({ length: 4 }, (_, setIndex) => (
+              <div key={`set-${setIndex}`} className="flex gap-5">
+                {[
+                  { icon: faScissors, name: 'scissors' },
+                  { icon: faSprayCan, name: 'sprayCan' },
+                  { icon: faPaintBrush, name: 'paintBrush' },
+                  { icon: faHeart, name: 'lipstick' },
+                  { icon: faPalette, name: 'nailPolish' },
+                  { icon: faShower, name: 'shower' },
+                  { icon: faFan, name: 'hairDryer' },
+                ].map((iconData, index) => (
+                  <FontAwesomeIcon 
+                    key={`${setIndex}-${index}`}
+                    icon={iconData.icon} 
+                    className="text-4xl text-emerald-800" 
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

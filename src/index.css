@@ -1,3 +1,57 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Metallic Green Gradient - Lighter */
+.metallic-green-gradient {
+  background: linear-gradient(
+    135deg,
+    #f0fdf4 0%,
+    #dcfce7 20%,
+    #bbf7d0 40%,
+    #86efac 60%,
+    #4ade80 80%,
+    #22c55e 100%
+  );
+  background-attachment: fixed;
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+}
+
+.metallic-green-gradient::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.1) 75%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.metallic-green-gradient::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.4) 0%,
+    transparent 20%,
+    transparent 80%,
+    rgba(0, 0, 0, 0.05) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}

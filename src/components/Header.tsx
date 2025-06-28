@@ -4,8 +4,8 @@ import logo from '../assets/logo.png';
 
 const links = [
   { id: 'home', label: 'Home' },
-  { id: 'our-work', label: 'Our Work' },
   { id: 'our-services', label: 'Our Services' },
+  { id: 'our-work', label: 'Our Work' },
   { id: 'contact', label: 'Connect' },
 ];
 
@@ -18,16 +18,19 @@ export default function Header() {
     const handleScroll = () => {
       const scrollPosition = window.scrollY + window.innerHeight / 3;
       let current = 'home';
+      
       for (const link of links) {
         const section = document.getElementById(link.id);
         if (section && section.offsetTop <= scrollPosition) {
           current = link.id;
         }
       }
+      
       setActive(current);
-      setScrolled(window.scrollY > 0);
+      setScrolled(window.scrollY > 10);
     };
-    window.addEventListener('scroll', handleScroll);
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -40,7 +43,7 @@ export default function Header() {
   };
 
   return (
-    <header className={`fixed top-0 left-0 w-full z-50 ${scrolled ? 'bg-green-600/70 backdrop-blur-md' : 'bg-green-600/40 backdrop-blur-sm'} shadow-md transition-all transition-blur`}>
+    <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-green-600/70 backdrop-blur-md' : 'bg-green-600/40 backdrop-blur-sm'} shadow-md`}>
       <nav className="flex justify-between items-center px-4 py-2 w-full max-w-screen min-w-[340px]">
         {/* Logo */}
         <div className="flex items-center gap-2">
@@ -64,13 +67,13 @@ export default function Header() {
         {/* Hamburger Icon for Mobile */}
         <div className="md:hidden flex items-center">
           <button
-            className="p-2 rounded focus:outline-none focus:ring-2 focus:ring-white"
-            onClick={() => setMenuOpen(m => !m)}
+            className="p-2 rounded focus:outline-none focus:ring-0 border-0"
+            onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Open menu"
           >
-            <span className="block w-6 h-0.5 bg-white mb-1 rounded transition-all" style={{ transform: menuOpen ? 'rotate(45deg) translateY(7px)' : 'none' }} />
-            <span className={`block w-6 h-0.5 bg-white mb-1 rounded transition-all ${menuOpen ? 'opacity-0' : ''}`} />
-            <span className="block w-6 h-0.5 bg-white rounded transition-all" style={{ transform: menuOpen ? 'rotate(-45deg) translateY(-7px)' : 'none' }} />
+            <span className="block w-6 h-0.5 bg-white mb-1 rounded transition-all duration-200" style={{ transform: menuOpen ? 'rotate(45deg) translateY(7px)' : 'none' }} />
+            <span className={`block w-6 h-0.5 bg-white mb-1 rounded transition-all duration-200 ${menuOpen ? 'opacity-0' : ''}`} />
+            <span className="block w-6 h-0.5 bg-white rounded transition-all duration-200" style={{ transform: menuOpen ? 'rotate(-45deg) translateY(-7px)' : 'none' }} />
           </button>
         </div>
         {/* Mobile Menu */}
@@ -80,6 +83,7 @@ export default function Header() {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.2 }}
               className="absolute top-full right-2 mt-2 w-48 bg-white/95 rounded-lg shadow-lg flex flex-col py-2 z-50 md:hidden"
             >
               {links.map(link => (
