@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import ServiceCard from '../components/ServiceCard';
+import PackageCard from '../components/PackageCard';
 
 const IMAGES = {
   bridalMakeup: "https://mjgorgeous.com/wp-content/uploads/2020/12/MACost2.jpg",
@@ -14,6 +15,29 @@ const IMAGES = {
   cleanup: "https://www.hopscotch.in/blog/wp-content/uploads/2020/01/Here%E2%80%99s-how-I-do-a-face-clean-up-at-home-by-myself_3.jpg",
   partyMakeup: "https://www.fiestaservices.co.in/cdn/shop/files/SangeetMakeupLook.png"
 };
+
+const packageData = [
+  {
+    id: 1,
+    image: IMAGES.hairSpa,
+    title: "Hair services"
+  },
+  {
+    id: 2,
+    image: IMAGES.bridalMakeup,
+    title: "Bridal package"
+  },
+  {
+    id: 3,
+    image: IMAGES.cleanup,
+    title: "skin treatments"
+  },
+  {
+    id: 4,
+    image: IMAGES.nailRefeling,
+    title: "nails services"
+  }
+];
 
 const servicesData = [
   {
@@ -85,6 +109,10 @@ const OurServices = () => {
   const headingRef = useRef<HTMLHeadingElement>(null);
   const paragraphRef = useRef<HTMLParagraphElement>(null);
   const hasAnimatedRef = useRef(false);
+  const greenLineRef = useRef<HTMLSpanElement>(null);
+  const packagesHeadingRef = useRef<HTMLHeadingElement>(null);
+  const packagesContainerRef = useRef<HTMLDivElement>(null);
+  const hasPackagesAnimatedRef = useRef(false);
 
   useEffect(() => {
     // Animate in the current card
@@ -135,6 +163,15 @@ const OurServices = () => {
     if (paragraphRef.current) {
       gsap.set(paragraphRef.current, { y: 30, opacity: 0 });
     }
+    if (greenLineRef.current) {
+      gsap.set(greenLineRef.current, { scaleX: 0, opacity: 1 });
+    }
+    if (packagesHeadingRef.current) {
+      gsap.set(packagesHeadingRef.current, { y: 30, opacity: 0 });
+    }
+    if (packagesContainerRef.current) {
+      gsap.set(packagesContainerRef.current, { y: 40, opacity: 0 });
+    }
 
     // Scroll-triggered animation
     const observer = new IntersectionObserver((entries) => {
@@ -150,11 +187,35 @@ const OurServices = () => {
             gsap.to(paragraphRef.current, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', delay: 0.2 });
           }
         }
+        
+        // Animate packages section
+        if (entry.isIntersecting && !hasPackagesAnimatedRef.current && 
+            (entry.target === greenLineRef.current || entry.target === packagesHeadingRef.current || entry.target === packagesContainerRef.current)) {
+          hasPackagesAnimatedRef.current = true;
+          
+          // Animate green line
+          if (greenLineRef.current) {
+            gsap.to(greenLineRef.current, { scaleX: 1, duration: 0.6, ease: 'power2.out' });
+          }
+          
+          // Animate packages heading
+          if (packagesHeadingRef.current) {
+            gsap.to(packagesHeadingRef.current, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', delay: 0.3 });
+          }
+          
+          // Animate packages container
+          if (packagesContainerRef.current) {
+            gsap.to(packagesContainerRef.current, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', delay: 0.5 });
+          }
+        }
       });
     }, { threshold: 0.3 });
 
     if (headingRef.current) observer.observe(headingRef.current);
     if (paragraphRef.current) observer.observe(paragraphRef.current);
+    if (greenLineRef.current) observer.observe(greenLineRef.current);
+    if (packagesHeadingRef.current) observer.observe(packagesHeadingRef.current);
+    if (packagesContainerRef.current) observer.observe(packagesContainerRef.current);
 
     return () => observer.disconnect();
   }, []);
@@ -174,13 +235,31 @@ const OurServices = () => {
           <div
             ref={cardRef}
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-md flex justify-center items-center sm:w-[80vw] md:w-[70vw] lg:w-[60vw]"
-            key={servicesData[current].id}
           >
             <ServiceCard
               image={servicesData[current].image}
               title={servicesData[current].title}
               description={servicesData[current].description}
             />
+          </div>
+        </div>
+        {/* Green Line Separator */}
+        <div className="mt-4 mb-6 flex justify-center">
+          <span ref={greenLineRef} className="h-0.5 bg-green-600 w-20 rounded-2xl block"></span>
+        </div>
+        
+        {/* Package Cards - Mobile Only */}
+        <div className="md:hidden">
+          <h2 ref={packagesHeadingRef} className="text-2xl font-bold mb-6 text-green-700 text-center opacity-0">Our Packages</h2>
+          <div ref={packagesContainerRef} className="grid grid-cols-2 gap-4 px-4 opacity-0 items-stretch">
+            {packageData.map((pkg, index) => (
+              <PackageCard
+                key={pkg.id}
+                image={pkg.image}
+                title={pkg.title}
+                delay={index * 0.1}
+              />
+            ))}
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import React from 'react';
 
 interface ServiceCardProps {
   image: string;
@@ -9,13 +9,7 @@ interface ServiceCardProps {
 
 const ServiceCard = ({ image, title, description, delay = 0 }: ServiceCardProps) => {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      transition={{ duration: 0.6, delay }}
-      viewport={{ once: true }}
-      className="bg-gray-200 shadow-lg rounded-3xl overflow-hidden transition-all duration-300 w-full max-w-[300px]"
-    >
+    <div className="bg-gray-200 shadow-lg rounded-3xl overflow-hidden transition-all duration-300 w-full max-w-[300px]">
       {/* Image Container */}
       <div className="relative h-48 overflow-hidden">
         <img
@@ -32,7 +26,7 @@ const ServiceCard = ({ image, title, description, delay = 0 }: ServiceCardProps)
         <h3 className="text-xl font-bold text-green-700 mb-3">{title}</h3>
         <p className="text-gray-600 leading-relaxed">{description}</p>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
