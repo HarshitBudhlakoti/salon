@@ -1,5 +1,3 @@
-import { motion } from 'framer-motion';
-
 interface ServiceCardProps {
   image: string;
   title: string;

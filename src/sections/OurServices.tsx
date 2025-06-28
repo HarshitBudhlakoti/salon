@@ -187,7 +187,7 @@ const OurServices = () => {
         {/* Horizontal Scrolling Container */}
         <div ref={containerRef} className="relative overflow-hidden h-[400px] flex items-center">
           <div ref={cardsRef} className="relative">
-            {servicesData.map((service, index) => (
+            {servicesData.map((service) => (
               <div key={service.id} className="service-card flex-shrink-0">
                 <ServiceCard
                   image={service.image}
