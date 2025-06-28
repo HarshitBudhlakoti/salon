@@ -173,7 +173,7 @@ const OurServices = () => {
         <div className="relative flex justify-center items-center min-h-[400px] mt-5 overflow-hidden">
           <div
             ref={cardRef}
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] max-w-md flex justify-center items-center md:w-full"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-md flex justify-center items-center sm:w-[80vw] md:w-[70vw] lg:w-[60vw]"
             key={servicesData[current].id}
           >
             <ServiceCard
