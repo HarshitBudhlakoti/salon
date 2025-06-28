@@ -136,7 +136,7 @@ export default function Home() {
   }, []);
 
   return (
-    <section id="home" className="w-full min-h-screen flex flex-col overflow-hidden relative">
+    <section id="home" className="w-full min-h-screen flex flex-col overflow-hidden relative bg-white">
       {/* Top 50%: Image Slider */}
       <div ref={imageSliderRef} className="relative w-full h-[50vh] min-h-[200px] z-10 bg-white opacity-0">
         <AnimatePresence initial={false} custom={direction}>

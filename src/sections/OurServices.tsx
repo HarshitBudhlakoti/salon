@@ -125,7 +125,7 @@ const OurServices = () => {
   }, [current]);
 
   return (
-    <section id="our-services" className="min-h-screen pt-5 pb-20 ">
+    <section id="our-services" className="min-h-screen pt-5 pb-20 bg-white">
       <div className="mx-auto max-w-2xl ">
         {/* Header */}
         <div className="text-center px-4">

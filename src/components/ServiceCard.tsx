@@ -14,7 +14,7 @@ const ServiceCard = ({ image, title, description, delay = 0 }: ServiceCardProps)
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.6, delay }}
       viewport={{ once: true }}
-      className="bg-white/90 backdrop-blur-sm rounded-3xl overflow-hidden transition-all duration-300 w-full"
+      className="bg-gray-200 shadow-lg rounded-3xl overflow-hidden transition-all duration-300 w-full"
     >
       {/* Image Container */}
       <div className="relative h-48 overflow-hidden">
