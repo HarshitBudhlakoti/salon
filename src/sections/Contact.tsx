@@ -218,7 +218,7 @@ const Contact = () => {
   };
 
   return (
-    <section ref={sectionRef} id="contact" className="min-h-screen flex flex-col justify-center items-center overflow-hidden pb-10">
+    <section ref={sectionRef} id="contact" className="min-h-screen flex flex-col justify-center items-center overflow-hidden pb-4">
       {isSubmitting && <LoaderPopup logoUrl={TRAYA_LOGO} />}
       {showConfirmation && (
         <ConfirmationPopup

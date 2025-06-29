@@ -4,6 +4,7 @@ import Home from './sections/Home'
 import OurWork from './sections/OurWork'
 import OurServices from './sections/OurServices'
 import Contact from './sections/Contact'
+import Footer from './components/Footer'
 
 function App() {
   // Scroll to top when the component mounts (on page reload)
@@ -51,6 +52,7 @@ function App() {
         <OurWork />
         <Contact />
       </main>
+      <Footer />
     </div>
   )
 }
