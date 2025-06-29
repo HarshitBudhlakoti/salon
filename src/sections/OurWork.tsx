@@ -4,9 +4,18 @@ import FeedbackCard from '../components/FeedbackCard';
 
 const OurWork = () => {
   const headerRef = useRef<HTMLDivElement>(null);
+  const reviewSectionRef = useRef<HTMLDivElement>(null);
   const [isHeaderInView, setIsHeaderInView] = useState(false);
+  const [isReviewSectionInView, setIsReviewSectionInView] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isReversing, setIsReversing] = useState(false);
+
+  const handleClick = (id: string) => {
+    const section = document.getElementById(id);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -23,6 +32,26 @@ const OurWork = () => {
 
     if (headerRef.current) {
       observer.observe(headerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsReviewSectionInView(true);
+        }
+      },
+      {
+        threshold: 0.3,
+        rootMargin: '-100px 0px'
+      }
+    );
+
+    if (reviewSectionRef.current) {
+      observer.observe(reviewSectionRef.current);
     }
 
     return () => observer.disconnect();
@@ -110,7 +139,7 @@ const OurWork = () => {
   ];
 
   return (
-    <section id="our-work" className="min-h-screen bg-gray-50 pb-20 overflow-hidden">
+    <section id="our-work" className="min-h-screen pt-8 pb-10 overflow-hidden">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div
@@ -119,16 +148,16 @@ const OurWork = () => {
         >
           <h1
             className={`text-4xl font-bold mb-6 transition-all duration-700 ${isHeaderInView
-                ? 'text-green-700 transform translate-y-0 opacity-100'
-                : 'text-gray-800 transform translate-y-8 opacity-0'
+              ? 'text-green-700 transform translate-y-0 opacity-100'
+              : 'text-gray-800 transform translate-y-8 opacity-0'
               }`}
           >
             Our Work
           </h1>
           <p
             className={`text-lg max-w-2xl mx-auto transition-all duration-700 delay-200 ${isHeaderInView
-                ? 'text-gray-800 transform translate-y-0 opacity-100'
-                : 'text-gray-600 transform translate-y-8 opacity-0'
+              ? 'text-gray-800 transform translate-y-0 opacity-100'
+              : 'text-gray-600 transform translate-y-8 opacity-0'
               }`}
           >
             Discover the amazing transformations we've created for our clients.
@@ -183,13 +212,13 @@ const OurWork = () => {
         </div>
 
         {/* Customer Reviews Section */}
-        <div className="mt-14 pb-4">
+        <div ref={reviewSectionRef} className="mt-14 pb-4">
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-green-700 ">What Our Clients Say</h2>
+            <h2 className={`text-2xl font-bold text-green-700 transition-all duration-700 ${isReviewSectionInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>What Our Clients Say</h2>
           </div>
 
           {/* Smooth Back and Forth Carousel */}
-          <div className="relative max-w-7xl mx-auto overflow-hidden">
+          <div className={`relative max-w-7xl mx-auto overflow-hidden transition-all duration-700 ${isReviewSectionInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <div className="flex justify-center">
               <div className="relative w-full overflow-hidden">
                 <div
@@ -221,13 +250,22 @@ const OurWork = () => {
         </div>
 
         {/* Call to Action */}
-        <div className="text-center mt-6">
-          <p className="text-lg text-gray-600 font-semibold mb-6">
+        <div className={`mt-6 transition-all duration-700 ${isReviewSectionInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <p className="text-lg text-gray-600 font-semibold mb-6 text-center">
             Ready to transform your look? Book your appointment today!
           </p>
-          <button className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-full transition-colors duration-300 shadow-lg hover:shadow-xl">
-            Book Appointment
-          </button>
+          <div className="flex justify-center">
+            <button onClick={() => handleClick('contact')} className="relative bg-gradient-to-r from-green-500 via-green-400 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-3 px-8 rounded-full transition-colors duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2 overflow-hidden">
+              <span className="glossy-wave" />
+              <span className="relative z-10 flex items-center gap-2">
+                
+                <svg className="w-6 h-6 animate-bounce" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
+                  <line x1="12" y1="5" x2="12" y2="17" />
+                  <polygon points="6,15 12,21 18,15" />
+                </svg>
+              </span>
+            </button>
+          </div>
         </div>
       </div>
     </section>

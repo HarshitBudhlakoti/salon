@@ -13,7 +13,7 @@ const PackageCard = ({ image, title, delay = 0 }: PackageCardProps) => {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay }}
       viewport={{ once: true }}
-      className="bg-white shadow-xl border-2 border-gray-200 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-105 hover:border-green-300 flex flex-col h-full"
+      className="bg-white shadow-md border-2 border-gray-200 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-105 hover:border-green-300 flex flex-col h-full"
     >
       {/* Image Container */}
       <div className="relative h-32 overflow-hidden">

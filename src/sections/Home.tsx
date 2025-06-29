@@ -136,7 +136,7 @@ export default function Home() {
   }, []);
 
   return (
-    <section id="home" className="w-full min-h-screen flex flex-col overflow-hidden relative bg-gray-50">
+    <section id="home" className="w-full min-h-screen flex flex-col overflow-hidden relative">
       {/* Top 50%: Image Slider */}
       <div ref={imageSliderRef} className="relative w-full h-[50vh] min-h-[200px] z-10 bg-white opacity-0">
         <AnimatePresence initial={false} custom={direction}>
@@ -155,8 +155,8 @@ export default function Home() {
       {/* Heading and Tagline filling the remaining space */}
       <div className="w-full flex flex-col justify-center items-center py-8 z-10 relative">
         <div className="flex flex-col items-center justify-center w-full h-full">
-          <h1 ref={taryaRef} className="font-mono font-bold text-7xl glossy-text pb-2 text-center opacity-0">
-            Tarya
+          <h1 ref={taryaRef} className="font-mono font-bold text-7xl  glossy-text pb-2 text-center opacity-0">
+            ~Tarya~
           </h1>
           <h2 ref={salonStudioRef} className="font-mono font-bold text-3xl glossy-text text-center opacity-0">
             Salon and Studio

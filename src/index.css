@@ -133,3 +133,62 @@ html, body {
     animation: none !important;
   }
 }
+
+@keyframes glossy-wave {
+  0% {
+    transform: translateX(-100%) skewX(-20deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(120%) skewX(-20deg);
+    opacity: 0;
+  }
+}
+
+.glossy-wave {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(120deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.15) 60%, rgba(255,255,255,0) 100%);
+  border-radius: 9999px;
+  pointer-events: none;
+  z-index: 2;
+  animation: glossy-wave 2.2s infinite linear;
+}
+
+.glossy-green-text {
+  position: relative;
+  display: inline-block;
+  background: linear-gradient(90deg, #22c55e 0%, #16a34a 30%, #15803d 50%, #16a34a 70%, #22c55e 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: glossy-move 5s linear infinite;
+}
+
+@keyframes spin-slow {
+  100% { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 1.5s linear infinite;
+}
+
+@keyframes flip {
+  0% { transform: rotateY(0deg); }
+  50% { transform: rotateY(180deg); }
+  100% { transform: rotateY(360deg); }
+}
+.animate-flip {
+  animation: flip 1.2s linear infinite;
+}
