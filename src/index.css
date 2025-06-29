@@ -105,3 +105,24 @@
     2px 2px 4px #FFD700,
     -2px -2px 4px #FFD700;
 }
+
+/* Infinite scroll animation for feedback carousel */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll linear infinite;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .animate-scroll {
+    animation: none !important;
+  }
+}

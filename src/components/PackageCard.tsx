@@ -26,7 +26,7 @@ const PackageCard = ({ image, title, delay = 0 }: PackageCardProps) => {
       
       {/* Content Container */}
       <div className="p-4 flex flex-col flex-grow">
-        <h3 className="text-lg font-bold text-gray-800 mb-3 text-center tracking-wide uppercase text-green-700 leading-tight">
+        <h3 className="text-md font-bold text-gray-800 mb-3 text-center tracking-wide uppercase text-green-700 leading-tight">
           {title.split(' ').map((word, index) => (
             <div key={index} className="text-center">
               {word}
