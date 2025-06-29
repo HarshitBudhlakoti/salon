@@ -9,7 +9,7 @@ interface FeedbackCardProps {
 
 const FeedbackCard: React.FC<FeedbackCardProps> = ({ image, name, rating, feedback }) => {
   return (
-    <div className="bg-gray-50 max-w-sm w-full overflow-hidden px-4 rounded-2xl mx-4 py-2">
+    <div className="bg-gray-50 max-w-sm w-full overflow-hidden px-4 rounded-2xl py-2">
       {/* Profile Image */}
       <div className="flex justify-center mb-1">
         <div className="w-16 h-16 rounded-full overflow-hidden border-4 border-green-100">

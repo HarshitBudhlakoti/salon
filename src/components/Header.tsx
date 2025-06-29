@@ -42,9 +42,9 @@ export default function Header() {
   };
 
   return (
-    <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-green-600/70 backdrop-blur-md' : 'bg-green-600/40 backdrop-blur-sm'} shadow-md`}>
-      <div className="mx-auto max-w-[400px] w-full">
-        <nav className="flex justify-between items-center px-4 py-2 w-full">
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-green-600/70 backdrop-blur-md' : 'bg-green-600/40 backdrop-blur-sm'} shadow-md`}>
+      <div className="max-w-[400px] mx-auto">
+        <nav className="flex justify-between items-center px-4 py-2">
           {/* Logo */}
           <div className="flex items-center gap-2">
             <img src="https://ik.imagekit.io/0mx6y4v8p/logo.webp" alt="Logo" className="h-10 w-10 object-contain rounded-full bg-white/80 p-1 shadow" />

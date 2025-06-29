@@ -110,12 +110,12 @@ const OurWork = () => {
   ];
 
   return (
-    <section id="our-work" className="min-h-screen bg-gray-50 pb-20">
-      <div className="container mx-auto">
+    <section id="our-work" className="min-h-screen bg-gray-50 pb-20 overflow-hidden">
+      <div className="container mx-auto px-4">
         {/* Header */}
         <div
           ref={headerRef}
-          className="text-center mb-16 px-4"
+          className="text-center mb-16"
         >
           <h1
             className={`text-4xl font-bold mb-6 transition-all duration-700 ${isHeaderInView
@@ -184,12 +184,12 @@ const OurWork = () => {
 
         {/* Customer Reviews Section */}
         <div className="mt-14 pb-4">
-          <div className="text-center mb-8 px-4">
+          <div className="text-center mb-8">
             <h2 className="text-2xl font-bold text-green-700 ">What Our Clients Say</h2>
           </div>
 
           {/* Smooth Back and Forth Carousel */}
-          <div className="relative max-w-7xl mx-auto">
+          <div className="relative max-w-7xl mx-auto overflow-hidden">
             <div className="flex justify-center">
               <div className="relative w-full overflow-hidden">
                 <div
@@ -221,7 +221,7 @@ const OurWork = () => {
         </div>
 
         {/* Call to Action */}
-        <div className="text-center mt-6 px-4">
+        <div className="text-center mt-6">
           <p className="text-lg text-gray-600 font-semibold mb-6">
             Ready to transform your look? Book your appointment today!
           </p>

@@ -43,9 +43,9 @@ function App() {
   }, [])
 
   return (
-    <div className="min-h-screen metallic-green-gradient">
+    <div className="min-h-screen metallic-green-gradient overflow-x-hidden">
       <Header />
-      <main className="relative">
+      <main className="relative overflow-x-hidden">
         <Home />
         <OurServices />
         <OurWork />

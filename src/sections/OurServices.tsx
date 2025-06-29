@@ -221,7 +221,7 @@ const OurServices = () => {
   }, []);
 
   return (
-    <section id="our-services" className="min-h-screen pt-8 pb-16 bg-gray-50">
+    <section id="our-services" className="min-h-screen pt-8 pb-16 bg-gray-50 overflow-hidden">
       <div className="mx-auto max-w-2xl ">
         {/* Header */}
         <div className="text-center px-4">
