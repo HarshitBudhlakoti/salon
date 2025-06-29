@@ -149,7 +149,7 @@ const OurServices = () => {
       } else {
         setCurrent((prev) => (prev + 1) % servicesData.length);
       }
-    }, 1000);
+    }, 3000);
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
