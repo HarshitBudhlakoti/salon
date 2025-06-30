@@ -12,22 +12,16 @@ import {
 import gsap from 'gsap';
 import Hls from 'hls.js';
 
-const images = [
-  'https://ik.imagekit.io/0mx6y4v8p/s2.avif',
-  'https://ik.imagekit.io/0mx6y4v8p/s5.webp',
-  'https://ik.imagekit.io/0mx6y4v8p/s3.webp',
-  'https://ik.imagekit.io/0mx6y4v8p/s7.webp',
-  'https://ik.imagekit.io/0mx6y4v8p/s8.webp',
-  'https://ik.imagekit.io/0mx6y4v8p/s10.webp',
-  'https://ik.imagekit.io/0mx6y4v8p/s9.webp',
-  'https://ik.imagekit.io/0mx6y4v8p/image.webp'
-];
-
-const videos = [
-  'https://iframe.mediadelivery.net/play/461723/f8b054be-1601-4039-ae21-22da87a55104?autoplay=true&muted=true&loop=true&controls=false',
-  'https://iframe.mediadelivery.net/play/461723/2b1e7b2a-2c1a-4e2b-8e2d-1a2b3c4d5e6f?autoplay=true&muted=true&loop=true&controls=false',
-  'https://iframe.mediadelivery.net/play/461723/3c2d1e0f-4b5a-6c7d-8e9f-0a1b2c3d4e5f?autoplay=true&muted=true&loop=true&controls=false',
-];
+// const images = [
+//   'https://ik.imagekit.io/0mx6y4v8p/s2.avif',
+//   'https://ik.imagekit.io/0mx6y4v8p/s5.webp',
+//   'https://ik.imagekit.io/0mx6y4v8p/s3.webp',
+//   'https://ik.imagekit.io/0mx6y4v8p/s7.webp',
+//   'https://ik.imagekit.io/0mx6y4v8p/s8.webp',
+//   'https://ik.imagekit.io/0mx6y4v8p/s10.webp',
+//   'https://ik.imagekit.io/0mx6y4v8p/s9.webp',
+//   'https://ik.imagekit.io/0mx6y4v8p/image.webp'
+// ];
 
 export default function Home() {
 
@@ -51,14 +45,6 @@ export default function Home() {
   const lineTopRef = useRef<HTMLSpanElement | null>(null);
   const lineBottomRef = useRef<HTMLSpanElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setDirection(1);
-      setCurrent(prev => (prev + 1) % images.length);
-    }, 2300);
-    return () => clearInterval(interval);
-  }, []);
 
   // GSAP entrance animation for headings, lines, tagline, and icon bar
   useEffect(() => {
