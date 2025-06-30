@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faScissors, 
@@ -11,6 +10,7 @@ import {
   faFan 
 } from '@fortawesome/free-solid-svg-icons';
 import gsap from 'gsap';
+import Hls from 'hls.js';
 
 const images = [
   'https://ik.imagekit.io/0mx6y4v8p/s2.avif',
@@ -23,9 +23,14 @@ const images = [
   'https://ik.imagekit.io/0mx6y4v8p/image.webp'
 ];
 
+const videos = [
+  'https://iframe.mediadelivery.net/play/461723/f8b054be-1601-4039-ae21-22da87a55104?autoplay=true&muted=true&loop=true&controls=false',
+  'https://iframe.mediadelivery.net/play/461723/2b1e7b2a-2c1a-4e2b-8e2d-1a2b3c4d5e6f?autoplay=true&muted=true&loop=true&controls=false',
+  'https://iframe.mediadelivery.net/play/461723/3c2d1e0f-4b5a-6c7d-8e9f-0a1b2c3d4e5f?autoplay=true&muted=true&loop=true&controls=false',
+];
+
 export default function Home() {
-  const [current, setCurrent] = useState(0);
-  const [direction, setDirection] = useState(1);
+
   const [taglineIdx, setTaglineIdx] = useState(0);
   const [lastScrollY, setLastScrollY] = useState(0);
   const taglines = [
@@ -45,6 +50,7 @@ export default function Home() {
   const salonStudioRef = useRef<HTMLHeadingElement | null>(null);
   const lineTopRef = useRef<HTMLSpanElement | null>(null);
   const lineBottomRef = useRef<HTMLSpanElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -135,22 +141,37 @@ export default function Home() {
     }
   }, []);
 
+  useEffect(() => {
+    if (videoRef.current) {
+      if (videoRef.current.canPlayType('application/vnd.apple.mpegurl')) {
+        videoRef.current.src = 'https://vz-fe419fbf-87f.b-cdn.net/f8b054be-1601-4039-ae21-22da87a55104/playlist.m3u8';
+      } else if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource('https://vz-fe419fbf-87f.b-cdn.net/f8b054be-1601-4039-ae21-22da87a55104/playlist.m3u8');
+        hls.attachMedia(videoRef.current);
+        return () => {
+          hls.destroy();
+        };
+      }
+    }
+  }, []);
+
   return (
     <section id="home" className="w-full min-h-screen flex flex-col overflow-hidden relative">
-      {/* Top 50%: Image Slider */}
-      <div ref={imageSliderRef} className="relative w-full h-[50vh] min-h-[200px] z-10 bg-white opacity-0">
-        <AnimatePresence initial={false} custom={direction}>
-          <motion.img
-            key={current}
-            src={images[current]}
-            alt={`slide-${current}`}
-            className="w-full h-full object-cover absolute top-0 left-0 z-20"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ opacity: { duration: 0.8, ease: 'easeInOut' } }}
-          />
-        </AnimatePresence>
+      {/* Top 50%: Video Streaming Test */}
+      <div ref={imageSliderRef} className="relative w-full h-[65vh] min-h-[200px] z-10 bg-white opacity-0 flex items-center justify-center">
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          loop
+          playsInline
+          controls={false}
+          className="w-full h-full object-cover"
+          style={{ background: '#000' }}
+        >
+          Sorry, your browser does not support embedded videos.
+        </video>
       </div>
       {/* Heading and Tagline filling the remaining space */}
       <div className="w-full flex flex-col justify-center items-center py-8 z-10 relative">
