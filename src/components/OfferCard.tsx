@@ -29,7 +29,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ text, videoUrl, price = '₹499',
   }, [videoUrl]);
 
   return (
-    <div className="relative flex items-end px-0 py-0 rounded-lg shadow-md border border-gray-200 min-w-[180px] max-w-[220px] h-[120px] overflow-visible mr-4 bg-black">
+    <div className="relative flex items-end px-0 py-0 rounded-lg shadow-md border border-gray-200 min-w-[180px] max-w-[220px] h-[120px] overflow-visible bg-black">
       {/* Background video */}
       {videoUrl && (
         <video
