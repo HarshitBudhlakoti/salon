@@ -1,0 +1,41 @@
+// Centralized asset links for images, videos, and other resources
+
+// Example image URLs as an object
+export const images = {
+    heroimages: [
+        'https://ik.imagekit.io/0mx6y4v8p/s2.avif',
+        'https://ik.imagekit.io/0mx6y4v8p/s5.webp',
+        'https://ik.imagekit.io/0mx6y4v8p/s3.webp',
+        'https://ik.imagekit.io/0mx6y4v8p/s7.webp',
+        'https://ik.imagekit.io/0mx6y4v8p/s8.webp',
+        'https://ik.imagekit.io/0mx6y4v8p/s10.webp',
+        'https://ik.imagekit.io/0mx6y4v8p/s9.webp',
+        'https://ik.imagekit.io/0mx6y4v8p/image.webp',
+    ],
+    logoText: 'https://res.cloudinary.com/dfm2w0hov/image/upload/v1751350516/logoT_va8m36.png'
+    // Add more keys like gallery, thumbnails, etc. as needed
+};
+
+// Example video URLs as an object
+export const videos = {
+    herovideo: 'https://vz-fe419fbf-87f.b-cdn.net/f8b054be-1601-4039-ae21-22da87a55104/playlist.m3u8',
+    // Add more keys like nailcardvideo, haircutvideo, etc. as needed
+    offercardvideos: [
+      'https://vz-fe419fbf-87f.b-cdn.net/80c30e66-e3f7-4f7e-8a3e-0154a44b0dba/playlist.m3u8',
+      'https://vz-fe419fbf-87f.b-cdn.net/80c30e66-e3f7-4f7e-8a3e-0154a44b0dba/playlist.m3u8',
+      'https://vz-fe419fbf-87f.b-cdn.net/80c30e66-e3f7-4f7e-8a3e-0154a44b0dba/playlist.m3u8',
+      'https://vz-fe419fbf-87f.b-cdn.net/80c30e66-e3f7-4f7e-8a3e-0154a44b0dba/playlist.m3u8',
+      'https://vz-fe419fbf-87f.b-cdn.net/80c30e66-e3f7-4f7e-8a3e-0154a44b0dba/playlist.m3u8',
+    ],
+};
+
+export const typingTexts = [
+  'Manicure',
+  'Pedicure',
+  'Facial',
+  'Haircut',
+  'Coloring',
+  'Styling',
+];
+
+// Add more asset arrays or constants as needed, e.g. for icons, audio, etc. 

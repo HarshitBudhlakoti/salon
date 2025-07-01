@@ -192,3 +192,35 @@ html, body {
 .animate-flip {
   animation: flip 1.2s linear infinite;
 }
+
+@keyframes offer-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-offer-scroll {
+  animation: offer-scroll 22s linear infinite;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes claimpulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  10% { transform: scale(1.18); opacity: 0.85; }
+  20% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.18); opacity: 0.85; }
+  60% { transform: scale(1); opacity: 1; }
+}
+.animate-claimpulse {
+  animation: claimpulse 2.5s 2;
+}

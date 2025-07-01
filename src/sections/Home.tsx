@@ -1,143 +1,66 @@
 import { useEffect, useState, useRef } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faScissors, 
-  faSprayCan, 
-  faPaintBrush, 
-  faHeart, 
-  faPalette, 
-  faShower, 
-  faFan 
-} from '@fortawesome/free-solid-svg-icons';
-import gsap from 'gsap';
-import Hls from 'hls.js';
-
-// const images = [
-//   'https://ik.imagekit.io/0mx6y4v8p/s2.avif',
-//   'https://ik.imagekit.io/0mx6y4v8p/s5.webp',
-//   'https://ik.imagekit.io/0mx6y4v8p/s3.webp',
-//   'https://ik.imagekit.io/0mx6y4v8p/s7.webp',
-//   'https://ik.imagekit.io/0mx6y4v8p/s8.webp',
-//   'https://ik.imagekit.io/0mx6y4v8p/s10.webp',
-//   'https://ik.imagekit.io/0mx6y4v8p/s9.webp',
-//   'https://ik.imagekit.io/0mx6y4v8p/image.webp'
-// ];
+import { videos, typingTexts, images } from '../assets';
+import OfferCard from '../components/OfferCard';
 
 export default function Home() {
+  // Typing effect state
+  const [typingIdx, setTypingIdx] = useState(0);
+  const [displayedText, setDisplayedText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [cursorVisible, setCursorVisible] = useState(true);
 
-  const [taglineIdx, setTaglineIdx] = useState(0);
-  const [lastScrollY, setLastScrollY] = useState(0);
-  const taglines = [
-    'Where Beauty Meets Artistry',
-    'Unleash Your Inner Glow',
-    'Elegance. Style. You.',
-    'Transforming Looks, Inspiring Confidence',
-    'Your Beauty, Our Passion',
-    'Experience the Art of Self-Care',
-  ];
-  const taglineRef = useRef<HTMLParagraphElement | null>(null);
-  const iconsContainerRef = useRef<HTMLDivElement | null>(null);
-  const iconsSliderRef = useRef<HTMLDivElement | null>(null);
-  const imageSliderRef = useRef<HTMLDivElement | null>(null);
-  // New refs for animated elements
-  const taryaRef = useRef<HTMLHeadingElement | null>(null);
-  const salonStudioRef = useRef<HTMLHeadingElement | null>(null);
-  const lineTopRef = useRef<HTMLSpanElement | null>(null);
-  const lineBottomRef = useRef<HTMLSpanElement | null>(null);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-
-  // GSAP entrance animation for headings, lines, tagline, and icon bar
+  // Typing effect logic
   useEffect(() => {
-    const tl = gsap.timeline();
-    tl.fromTo(taryaRef.current, { x: -80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8, ease: 'power2.out' })
-      .fromTo(salonStudioRef.current, { x: 80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8, ease: 'power2.out' }, '-=0.5')
-      .fromTo(lineTopRef.current, { x: -100, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }, '-=0.4')
-      .fromTo(lineBottomRef.current, { x: 100, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }, '-=0.4')
-      .to(taglineRef.current, { opacity: 1, duration: 0.7, ease: 'power2.out' }, '+=0.1')
-      .fromTo(iconsSliderRef.current, { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power2.out' }, '-=0.4');
-  }, []);
-
-  useEffect(() => {
-    // Tagline flip animation
-    const flipInterval = setInterval(() => {
-      if (!taglineRef.current) return;
-      gsap.to(taglineRef.current, {
-        rotateY: 90,
-        opacity: 0,
-        duration: 0.35,
-        ease: 'power1.in',
-        onComplete: () => {
-          setTaglineIdx(prev => (prev + 1) % taglines.length);
-          gsap.set(taglineRef.current, { rotateY: -90 });
-          gsap.to(taglineRef.current, {
-            rotateY: 0,
-            opacity: 1,
-            duration: 0.35,
-            ease: 'power1.out',
-          });
-        }
-      });
-    }, 2600);
-    return () => clearInterval(flipInterval);
-  }, []);
-
-  // Scroll handler for icons animation
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const scrollDirection = currentScrollY > lastScrollY ? 1 : -1;
-      
-      setLastScrollY(currentScrollY);
-
-      // Animate icons based on scroll direction
-      if (iconsContainerRef.current) {
-        const currentX = Number(gsap.getProperty(iconsContainerRef.current, 'x')) || 0;
-        const newX = currentX - (scrollDirection * 8); // Same speed for both directions
-        
-        // Improved infinite loop logic
-        const iconWidth = 60;
-        const totalIcons = 7;
-        const totalWidth = iconWidth * totalIcons;
-        
-        let finalX = newX;
-        
-        // Create seamless infinite loop - same logic for both directions
-        if (newX <= -totalWidth) {
-          finalX = newX + totalWidth;
-        } else if (newX >= 0) {
-          finalX = newX - totalWidth;
-        }
-        
-        gsap.to(iconsContainerRef.current, {
-          x: finalX,
-          duration: 0.3,
-          ease: 'power2.out'
-        });
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
-
-  useEffect(() => {
-    // Fade in image slider on mount
-    if (imageSliderRef.current) {
-      gsap.fromTo(imageSliderRef.current, { opacity: 0 }, { opacity: 1, duration: 1.1, ease: 'power2.out' });
+    let typingTimeout: NodeJS.Timeout;
+    const currentText = typingTexts[typingIdx];
+    if (!isDeleting && displayedText.length < currentText.length) {
+      typingTimeout = setTimeout(() => {
+        setDisplayedText(currentText.slice(0, displayedText.length + 1));
+      }, 70);
+    } else if (!isDeleting && displayedText.length === currentText.length) {
+      typingTimeout = setTimeout(() => setIsDeleting(true), 1200);
+    } else if (isDeleting && displayedText.length > 0) {
+      typingTimeout = setTimeout(() => {
+        setDisplayedText(currentText.slice(0, displayedText.length - 1));
+      }, 40);
+    } else if (isDeleting && displayedText.length === 0) {
+      typingTimeout = setTimeout(() => {
+        setIsDeleting(false);
+        setTypingIdx((prev) => (prev + 1) % typingTexts.length);
+      }, 400);
     }
+    return () => clearTimeout(typingTimeout);
+  }, [displayedText, isDeleting, typingIdx]);
+
+  // Blinking cursor effect
+  useEffect(() => {
+    const cursorInterval = setInterval(() => {
+      setCursorVisible((v) => !v);
+    }, 500);
+    return () => clearInterval(cursorInterval);
   }, []);
 
+  // Video hero refs and logic
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const handleLoadedMetadata = () => {
+    if (videoRef.current) {
+      videoRef.current.currentTime = 3;
+    }
+  };
   useEffect(() => {
     if (videoRef.current) {
       if (videoRef.current.canPlayType('application/vnd.apple.mpegurl')) {
-        videoRef.current.src = 'https://vz-fe419fbf-87f.b-cdn.net/f8b054be-1601-4039-ae21-22da87a55104/playlist.m3u8';
-      } else if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource('https://vz-fe419fbf-87f.b-cdn.net/f8b054be-1601-4039-ae21-22da87a55104/playlist.m3u8');
-        hls.attachMedia(videoRef.current);
-        return () => {
-          hls.destroy();
-        };
+        videoRef.current.src = videos.herovideo;
+      } else {
+        import('hls.js').then(HlsModule => {
+          const Hls = HlsModule.default;
+          if (Hls.isSupported()) {
+            const hls = new Hls();
+            hls.loadSource(videos.herovideo);
+            hls.attachMedia(videoRef.current!);
+            return () => hls.destroy();
+          }
+        });
       }
     }
   }, []);
@@ -145,7 +68,7 @@ export default function Home() {
   return (
     <section id="home" className="w-full min-h-screen flex flex-col overflow-hidden relative">
       {/* Top 50%: Video Streaming Test */}
-      <div ref={imageSliderRef} className="relative w-full h-[65vh] min-h-[200px] z-10 bg-white opacity-0 flex items-center justify-center">
+      <div className="relative w-full h-[55vh] min-h-[200px] z-10 bg-white flex items-center justify-center">
         <video
           ref={videoRef}
           autoPlay
@@ -155,63 +78,65 @@ export default function Home() {
           controls={false}
           className="w-full h-full object-cover"
           style={{ background: '#000' }}
+          onLoadedMetadata={handleLoadedMetadata}
         >
           Sorry, your browser does not support embedded videos.
         </video>
-      </div>
-      {/* Heading and Tagline filling the remaining space */}
-      <div className="w-full flex flex-col justify-center items-center py-8 z-10 relative">
-        <div className="flex flex-col items-center justify-center w-full h-full">
-          <h1 ref={taryaRef} className="font-mono font-bold text-7xl  glossy-text pb-2 text-center opacity-0">
-            ~Tarya~
-          </h1>
-          <h2 ref={salonStudioRef} className="font-mono font-bold text-3xl glossy-text text-center opacity-0">
-            Salon and Studio
-          </h2>
+        {/* Typing effect overlay */}
+        <div
+          style={{ position: 'absolute', left: 0, bottom: 0, paddingLeft: '2rem', paddingBottom: '1.5rem', pointerEvents: 'none', zIndex: 20 }}
+        >
+          <span
+            style={{
+              fontWeight: 'bold',
+              color: 'white',
+              fontSize: '2rem',
+              textShadow: '0 2px 8px #000, 0 0px 2px #000',
+              letterSpacing: '0.02em',
+              display: 'inline-block',
+              minWidth: '6ch',
+              userSelect: 'none',
+            }}
+          >
+            {displayedText}
+            <span style={{
+              display: 'inline-block',
+              width: '1ch',
+              color: 'white',
+              opacity: cursorVisible ? 1 : 0,
+              fontWeight: 'bold',
+              fontSize: '2rem',
+              verticalAlign: 'bottom',
+              transition: 'opacity 0.2s',
+            }}>
+              |
+            </span>
+          </span>
         </div>
       </div>
-
-      <span ref={lineTopRef} className="h-0.5 bg-green-700 mx-10 mb-4 mt-6 rounded-2xl opacity-0"></span>
-
-      <p
-        ref={taglineRef}
-        className="text-md md:text-2xl font-medium text-emerald-800 italic text-center opacity-0 my-4"
-        style={{ display: 'inline-block', perspective: '400px' }}
-      >
-        {taglines[taglineIdx]}
-      </p>
-     
-      <span ref={lineBottomRef} className="h-0.5 bg-green-700 mx-6 my-4 rounded-2xl opacity-0"></span>
-      
-      {/* Simple horizontal icons loop */}
-      <div ref={iconsSliderRef} className="overflow-hidden my-4 opacity-0">
-        <div 
-          ref={iconsContainerRef}
-          className="flex gap-6 whitespace-nowrap items-center"
-          style={{ 
-            width: 'max-content',
-            transform: 'translateX(0px)'
-          }}
-        >
-          {/* Multiple sets for seamless infinite loop */}
-          {Array.from({ length: 4 }, (_, setIndex) => (
-            <div key={`set-${setIndex}`} className="flex gap-5 pt-5">
-              {[
-                { icon: faScissors, name: 'scissors' },
-                { icon: faSprayCan, name: 'sprayCan' },
-                { icon: faPaintBrush, name: 'paintBrush' },
-                { icon: faHeart, name: 'lipstick' },
-                { icon: faPalette, name: 'nailPolish' },
-                { icon: faShower, name: 'shower' },
-                { icon: faFan, name: 'hairDryer' },
-              ].map((iconData, index) => (
-                <FontAwesomeIcon 
-                  key={`${setIndex}-${index}`}
-                  icon={iconData.icon} 
-                  className="text-4xl text-emerald-800" 
-                />
-              ))}
-            </div>
+      {/* Tarya Logo below video */}
+      <div className="w-full flex flex-col justify-center items-center z-10 relative">
+        <div className="flex flex-col items-center justify-center w-full h-full px-6">
+          <img src={images.logoText} alt="Tarya Salon and Studio Logo" className="h-28 object-contain opacity-0" onLoad={e => e.currentTarget.classList.remove('opacity-0')} />
+        </div>
+      </div>
+      {/* Attractive Offer Cards Scroller */}
+      <div className="w-full overflow-x-auto mb-2 relative scrollbar-hide" style={{height: 'auto', minHeight: 0}}>
+        <div className="flex px-2 gap-2 whitespace-nowrap" style={{ willChange: 'transform' }}>
+          {videos.offercardvideos.map((videoUrl, idx) => (
+            <OfferCard
+              key={idx}
+              text={
+                [
+                  'Upto 50% OFF on Cleaning Services',
+                  'Flat 30% OFF on Hair Spa',
+                  'Free Nail Art on Manicure',
+                  'Combo: Haircut + Facial at 40% OFF',
+                  'Refer & Earn: 20% OFF',
+                ][idx % 5]
+              }
+              videoUrl={videoUrl}
+            />
           ))}
         </div>
       </div>
