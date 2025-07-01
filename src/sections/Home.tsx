@@ -53,27 +53,13 @@ export default function Home() {
     }
   };
   useEffect(() => {
-    if (videoRef.current) {
-      const handleCanPlay = () => setShowLoader(false);
-      videoRef.current.addEventListener('canplay', handleCanPlay);
-      if (videoRef.current.canPlayType('application/vnd.apple.mpegurl')) {
-        videoRef.current.src = videos.herovideo;
-      } else {
-        import('hls.js').then(HlsModule => {
-          const Hls = HlsModule.default;
-          if (Hls.isSupported()) {
-            const hls = new Hls();
-            hls.loadSource(videos.herovideo);
-            hls.attachMedia(videoRef.current!);
-            // hls.js will trigger 'canplay' on the video element
-            return () => hls.destroy();
-          }
-        });
-      }
-      return () => {
-        videoRef.current?.removeEventListener('canplay', handleCanPlay);
-      };
-    }
+    const video = videoRef.current;
+    if (!video) return;
+    const handleCanPlay = () => setShowLoader(false);
+    video.addEventListener('canplay', handleCanPlay);
+    return () => {
+      video.removeEventListener('canplay', handleCanPlay);
+    };
   }, []);
 
   return (
@@ -83,6 +69,7 @@ export default function Home() {
       <div className="relative w-full h-[55vh] min-h-[200px] z-10 bg-white flex items-center justify-center">
         <video
           ref={videoRef}
+          src={videos.herovideo}
           autoPlay
           muted
           loop

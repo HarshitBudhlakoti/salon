@@ -19,7 +19,7 @@ export const images = {
 
 // Example video URLs as an object
 export const videos = {
-    herovideo: 'https://vz-fe419fbf-87f.b-cdn.net/f8b054be-1601-4039-ae21-22da87a55104/playlist.m3u8',
+    herovideo: 'https://res.cloudinary.com/dfm2w0hov/video/upload/v1751391836/heroVideo_kejldw.mp4',
     // Add more keys like nailcardvideo, haircutvideo, etc. as needed
     offercardvideos: [
       {
