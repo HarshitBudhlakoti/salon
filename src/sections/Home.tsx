@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { videos, typingTexts, images } from '../assets';
 import OfferCard from '../components/OfferCard';
 import LoaderPopup from '../components/LoaderPopup';
+import TrendingCard from '../components/TrendingCard.tsx';
 
 export default function Home() {
   // Loader state
@@ -102,7 +103,7 @@ export default function Home() {
               fontWeight: 'bold',
               color: 'white',
               fontSize: '2rem',
-              textShadow: '0 2px 8px #000, 0 0px 2px #000',
+              textShadow: '0 2px px #000, 0 0px 2px #000',
               letterSpacing: '0.02em',
               display: 'inline-block',
               minWidth: '6ch',
@@ -131,22 +132,33 @@ export default function Home() {
           <img src={images.logoText} alt="Tarya Salon and Studio Logo" className="h-28 object-contain opacity-0" onLoad={e => e.currentTarget.classList.remove('opacity-0')} />
         </div>
       </div>
+      {/* Persuasive heading for offers */}
+      <div className="w-full flex items-center mb-1 pb-2 justify-start">
+        <h2 className="text-xl md:text-2xl font-bold text-black drop-shadow-sm text-left px-4">
+          Grab Exclusive Offers Now!
+        </h2>
+      </div>
       {/* Attractive Offer Cards Scroller */}
       <div className="w-full overflow-x-auto mb-2 relative scrollbar-hide" style={{height: 'auto', minHeight: 0}}>
         <div className="flex px-2 gap-2 whitespace-nowrap" style={{ willChange: 'transform' }}>
-          {videos.offercardvideos.map((videoUrl, idx) => (
+          {videos.offercardvideos.map((offer) => (
             <OfferCard
-              key={idx}
-              text={
-                [
-                  'Upto 50% OFF on Cleaning Services',
-                  'Flat 30% OFF on Hair Spa',
-                  'Free Nail Art on Manicure',
-                  'Combo: Haircut + Facial at 40% OFF',
-                  'Refer & Earn: 20% OFF',
-                ][idx % 5]
-              }
-              videoUrl={videoUrl}
+              key={offer.key}
+              text={offer.title}
+              videoUrl={offer.video}
+            />
+          ))}
+        </div>
+      </div>
+      {/* Trending Services Section */}
+      <div className="w-full mt-4">
+        <h2 className="text-2xl md:text-2xl font-bold text-black px-4 mb-3 text-">Trending Services</h2>
+        <div className="flex gap-3 overflow-x-auto px-3 pb-2 scrollbar-hide">
+          {videos.trendingServiceVideos.map((service) => (
+            <TrendingCard
+              key={service.key}
+              videoUrl={service.video}
+              title={service.title}
             />
           ))}
         </div>
