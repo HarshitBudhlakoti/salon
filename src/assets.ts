@@ -12,7 +12,8 @@ export const images = {
         'https://ik.imagekit.io/0mx6y4v8p/s9.webp',
         'https://ik.imagekit.io/0mx6y4v8p/image.webp',
     ],
-    logoText: 'https://res.cloudinary.com/dfm2w0hov/image/upload/v1751350516/logoT_va8m36.png'
+    logoText: 'https://res.cloudinary.com/dfm2w0hov/image/upload/v1751350516/logoT_va8m36.png',
+    logo: 'https://ik.imagekit.io/0mx6y4v8p/logo.webp'
     // Add more keys like gallery, thumbnails, etc. as needed
 };
 

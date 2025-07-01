@@ -219,7 +219,7 @@ const Contact = () => {
 
   return (
     <section ref={sectionRef} id="contact" className="min-h-screen flex flex-col justify-center items-center overflow-hidden pb-4">
-      {isSubmitting && <LoaderPopup logoUrl={TRAYA_LOGO} />}
+      {isSubmitting && <LoaderPopup />}
       {showConfirmation && (
         <ConfirmationPopup
           message="We have received your request and will contact you soon."

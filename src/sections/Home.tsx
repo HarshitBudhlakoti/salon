@@ -1,8 +1,12 @@
 import { useEffect, useState, useRef } from 'react';
 import { videos, typingTexts, images } from '../assets';
 import OfferCard from '../components/OfferCard';
+import LoaderPopup from '../components/LoaderPopup';
 
 export default function Home() {
+  // Loader state
+  const [showLoader, setShowLoader] = useState(true);
+
   // Typing effect state
   const [typingIdx, setTypingIdx] = useState(0);
   const [displayedText, setDisplayedText] = useState('');
@@ -49,6 +53,8 @@ export default function Home() {
   };
   useEffect(() => {
     if (videoRef.current) {
+      const handleCanPlay = () => setShowLoader(false);
+      videoRef.current.addEventListener('canplay', handleCanPlay);
       if (videoRef.current.canPlayType('application/vnd.apple.mpegurl')) {
         videoRef.current.src = videos.herovideo;
       } else {
@@ -58,15 +64,20 @@ export default function Home() {
             const hls = new Hls();
             hls.loadSource(videos.herovideo);
             hls.attachMedia(videoRef.current!);
+            // hls.js will trigger 'canplay' on the video element
             return () => hls.destroy();
           }
         });
       }
+      return () => {
+        videoRef.current?.removeEventListener('canplay', handleCanPlay);
+      };
     }
   }, []);
 
   return (
     <section id="home" className="w-full min-h-screen flex flex-col overflow-hidden relative">
+      {showLoader && <LoaderPopup />}
       {/* Top 50%: Video Streaming Test */}
       <div className="relative w-full h-[55vh] min-h-[200px] z-10 bg-white flex items-center justify-center">
         <video
