@@ -29,4 +29,29 @@ const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({ message, onClose,
   );
 };
 
+interface SubPackagePopupProps {
+  open: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+}
+
+export const SubPackagePopup: React.FC<SubPackagePopupProps> = ({ open, onClose, children }) => {
+  return (
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center transition-all duration-300 ${open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'} bg-black/30 backdrop-blur-sm`}
+    >
+      <div className={`relative bg-white rounded-2xl shadow-2xl px-6 py-8 w-full max-w-md mx-4 transition-all duration-300 transform ${open ? 'scale-100 translate-y-0' : 'scale-95 translate-y-8'} max-h-[90vh] min-h-[60vh] overflow-y-auto`}>
+        <button
+          onClick={onClose}
+          className="absolute left-4 top-4 text-gray-500 hover:text-green-600 text-2xl font-bold focus:outline-none"
+          aria-label="Back"
+        >
+          &#8592;
+        </button>
+        <div className="pt-6">{children}</div>
+      </div>
+    </div>
+  );
+};
+
 export default ConfirmationPopup; 

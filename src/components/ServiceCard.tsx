@@ -28,4 +28,25 @@ const ServiceCard = ({ image, title, description }: ServiceCardProps) => {
   );
 };
 
+interface SmallServiceCardProps {
+  image: string;
+  title: string;
+}
+
+export const SmallServiceCard = ({ image, title }: SmallServiceCardProps) => {
+  return (
+    <div className="bg-white shadow-md rounded-xl overflow-hidden w-24 h-24 sm:w-40 sm:h-40 flex flex-col items-center justify-end relative">
+      <img
+        src={image}
+        alt={title}
+        className="absolute top-0 left-0 w-full h-full object-cover object-center z-0"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
+      <div className="relative z-20 w-full text-center p-1 pb-2">
+        <span className="block text-white font-semibold text-xs drop-shadow-md truncate">{title}</span>
+      </div>
+    </div>
+  );
+};
+
 export default ServiceCard; 

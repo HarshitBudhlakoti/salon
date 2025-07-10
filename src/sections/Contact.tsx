@@ -111,10 +111,12 @@ const Contact = () => {
   const [timeSlot, setTimeSlot] = useState('');
   const [hearAbout, setHearAbout] = useState('');
   const [otherService, setOtherService] = useState('');
+  const [specialRequest, setSpecialRequest] = useState('');
   const [nameError, setNameError] = useState('');
   const [phoneError, setPhoneError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [error, setError] = useState('');
 
   // Animate form when section comes into view
   useEffect(() => {
@@ -147,27 +149,54 @@ const Contact = () => {
   const subsubcategories = subObj ? subObj.subsub : [];
 
   // Handle form submit
-  const handleSubmit = (e: React.FormEvent) => {
+  const API_URL = 'https://sheetdb.io/api/v1/i37y8wd3z7ewu';
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setTimeout(() => {
+    setError('');
+    const data = {
+      name,
+      phone,
+      service: selectedService,
+      subCategory: selectedSub,
+      date,
+      timeSlot,
+      hearAbout,
+      specialRequest,
+    };
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data }),
+      });
+      const result = await response.json();
+      if (response.ok && (result.created || result[0] || result.success || result.length >= 0)) {
+        setIsSubmitting(false);
+        // Reset form fields
+        setName('');
+        setPhone('');
+        setSelectedService('');
+        setSelectedSub('');
+        setSelectedSubSub('');
+        setOtherService('');
+        setDate('');
+        setTimeSlot('');
+        setHearAbout('');
+        setSpecialRequest('');
+        setNameError('');
+        setPhoneError('');
+        setTimeout(() => {
+          setShowConfirmation(true);
+        }, 200);
+      } else {
+        setIsSubmitting(false);
+        setError('Something went wrong. Please try again.');
+      }
+    } catch (err) {
       setIsSubmitting(false);
-      // Reset form fields
-      setName('');
-      setPhone('');
-      setSelectedService('');
-      setSelectedSub('');
-      setSelectedSubSub('');
-      setOtherService('');
-      setDate('');
-      setTimeSlot('');
-      setHearAbout('');
-      setNameError('');
-      setPhoneError('');
-      setTimeout(() => {
-        setShowConfirmation(true);
-      }, 200); // Delay to allow scroll to be visible
-    }, 2000);
+      setError('Network error. Please try again.');
+    }
   };
 
   // Handler for OK button and auto-dismiss
@@ -234,6 +263,7 @@ const Contact = () => {
         </h1>
         <p className="text-md text-gray-600 mb-6 sm:mb-12 text-center">Your info is <span className="font-semibold text-green-700">100% safe</span>.</p>
         <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-y-5">
+          {error && <div className="text-red-500 text-center mb-2">{error}</div>}
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="flex-1">
               <label className="block text-gray-700 font-semibold mb-1">Name <span className="text-red-500">*</span></label>
@@ -309,7 +339,7 @@ const Contact = () => {
           </div>
           <div>
             <label className="block text-gray-700 font-semibold mb-1">Any Special Request</label>
-            <textarea name="specialRequest" rows={3} className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-400 outline-none transition-all duration-200 resize-none" placeholder="Let us know if you have any special requests..."></textarea>
+            <textarea name="specialRequest" rows={3} value={specialRequest} onChange={e => setSpecialRequest(e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-400 outline-none transition-all duration-200 resize-none" placeholder="Let us know if you have any special requests..."></textarea>
           </div>
           <button
             type="submit"

@@ -91,4 +91,105 @@ export const typingTexts = [
   'Styling',
 ];
 
+export const serviceCards = [
+  {
+    serviceKey: 'bridal-makeup',
+    image: 'https://img.freepik.com/free-photo/beautiful-woman-getting-makeup-salon_155003-28213.jpg',
+    title: 'Bridal Makeup',
+    subPackages: [
+      { key: 'hd-makeup-airbrush', image: '', title: 'HD Makeup (Airbrush)', price: 4999, discountedPrice: 3999 },
+      { key: 'hd-makeup-traditional', image: '', title: 'HD Makeup (Traditional)', price: 4999, discountedPrice: 3999 },
+      { key: 'engagement-day', image: '', title: 'Engagement Makeup (Day)', price: 2999, discountedPrice: 2499 },
+      { key: 'engagement-evening', image: '', title: 'Engagement Makeup (Evening)', price: 2999, discountedPrice: 2499 },
+    ],
+  },
+  {
+    serviceKey: 'hair-color',
+    image: 'https://img.freepik.com/free-photo/hairdresser-making-hairstyle-young-woman-beauty-salon_155003-28219.jpg',
+    title: 'Hair Color',
+    subPackages: [
+      { key: 'global-ammonia-free', image: '', title: 'Global (Ammonia Free)', price: 1999, discountedPrice: 1499 },
+      { key: 'global-with-ammonia', image: '', title: 'Global (With Ammonia)', price: 1999, discountedPrice: 1499 },
+      { key: 'highlights-balayage', image: '', title: 'Highlights (Balayage)', price: 2499, discountedPrice: 1999 },
+      { key: 'highlights-ombre', image: '', title: 'Highlights (Ombre)', price: 2499, discountedPrice: 1999 },
+      { key: 'highlights-streaks', image: '', title: 'Highlights (Streaks)', price: 2499, discountedPrice: 1999 },
+    ],
+  },
+  {
+    serviceKey: 'hair-wash',
+    image: 'https://www.saberhealth.com/uploaded/blog/images/wash-hair.jpg',
+    title: 'Hair Wash',
+    subPackages: [
+      { key: 'basic', image: '', title: 'Basic Wash', price: 399, discountedPrice: 299 },
+      { key: 'spa-wash', image: '', title: 'Spa Wash', price: 699, discountedPrice: 499 },
+    ],
+  },
+  {
+    serviceKey: 'pedicure',
+    image: 'https://cosmeticclinic.net.au/wp-content/uploads/2024/11/reduced_image_smaller.jpg',
+    title: 'Pedicure',
+    subPackages: [
+      { key: 'classic', image: '', title: 'Classic Pedicure', price: 799, discountedPrice: 599 },
+      { key: 'spa', image: '', title: 'Spa Pedicure', price: 1199, discountedPrice: 899 },
+    ],
+  },
+  {
+    serviceKey: 'makeup',
+    image: 'https://img.freepik.com/free-photo/visagiste-applying-makeup-brush-model-face_155003-28218.jpg',
+    title: 'Makeup',
+    subPackages: [
+      { key: 'party', image: '', title: 'Party Makeup', price: 1499, discountedPrice: 999 },
+      { key: 'fashion', image: '', title: 'Fashion Makeup', price: 1799, discountedPrice: 1299 },
+    ],
+  },
+  {
+    serviceKey: 'hair-spa',
+    image: 'https://blog.buywow.in/wp-content/uploads/2024/06/jpeg-optimizer_soothing-shampoo-experience-prior-to-stem-cell-hai-2024-04-01-20-00-49-utc-scaled.jpg',
+    title: 'Hair Spa',
+    subPackages: [
+      { key: 'keratin', image: '', title: 'Keratin Spa', price: 1999, discountedPrice: 1499 },
+      { key: 'smoothening', image: '', title: 'Smoothening Spa', price: 1799, discountedPrice: 1299 },
+    ],
+  },
+];
+
+export const carouselCards = [
+  {
+    serviceKey: 'nail-refeling',
+    image: 'https://www.relaxationhubatyourplace.com.decideprecisetechnologies.com/assets/images/services/gel-refilling.png',
+    title: 'Nail Refilling',
+    subPackages: [
+      { key: 'gel', image: '', title: 'Gel Refilling', price: 999, discountedPrice: 799 },
+      { key: 'acrylic', image: '', title: 'Acrylic Refilling', price: 1199, discountedPrice: 899 },
+    ],
+  },
+  {
+    serviceKey: 'hair-styling',
+    image: 'https://www.mbmmakeupstudio.com/wp-content/uploads/2021/10/hair-styling-course-in-Delhi.jpg',
+    title: 'Hair Styling',
+    subPackages: [
+      { key: 'curls', image: '', title: 'Curls Styling', price: 799, discountedPrice: 599 },
+      { key: 'straightening', image: '', title: 'Straightening', price: 999, discountedPrice: 799 },
+    ],
+  },
+  {
+    serviceKey: 'cleanup',
+    image: 'https://www.hopscotch.in/blog/wp-content/uploads/2020/01/Here%E2%80%99s-how-I-do-a-face-clean-up-at-home-by-myself_3.jpg',
+    title: 'Cleanup',
+    subPackages: [
+      { key: 'basic', image: '', title: 'Basic Cleanup', price: 499, discountedPrice: 349 },
+      { key: 'advanced', image: '', title: 'Advanced Cleanup', price: 899, discountedPrice: 699 },
+    ],
+  },
+  {
+    serviceKey: 'party-makeup',
+    image: 'https://www.fiestaservices.co.in/cdn/shop/files/SangeetMakeupLook.png',
+    title: 'Party Makeup',
+    subPackages: [
+      { key: 'cocktail', image: '', title: 'Cocktail Makeup', price: 1799, discountedPrice: 1299 },
+      { key: 'reception', image: '', title: 'Reception Makeup', price: 1999, discountedPrice: 1499 },
+    ],
+  },
+];
+
 // Add more asset arrays or constants as needed, e.g. for icons, audio, etc. 

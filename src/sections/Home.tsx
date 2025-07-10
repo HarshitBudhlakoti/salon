@@ -139,7 +139,8 @@ export default function Home() {
       </div>
       {/* Trending Services Section */}
       <div className="w-full mt-4">
-        <h2 className="text-2xl md:text-2xl font-bold text-black px-4 mb-3 text-">Trending Services</h2>
+        <h2 className="text-2xl md:text-2xl font-bold text-black px-4 mb-1 text-">Trending Services</h2>
+        <div className="h-1 bg-green-600 rounded-full ml-4 mb-5 w-1/2 max-w-xs"></div>
         <div className="flex gap-3 overflow-x-auto px-3 pb-2 scrollbar-hide">
           {videos.trendingServiceVideos.map((service) => (
             <TrendingCard

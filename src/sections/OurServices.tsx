@@ -1,268 +1,188 @@
-import { useEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import ServiceCard from '../components/ServiceCard';
-import PackageCard from '../components/PackageCard';
-
-const IMAGES = {
-  bridalMakeup: "https://mjgorgeous.com/wp-content/uploads/2020/12/MACost2.jpg",
-  hairColor: "https://streax.in/cdn/shop/files/hair_color_1024x1024.png",
-  hairWash: "https://www.saberhealth.com/uploaded/blog/images/wash-hair.jpg",
-  pedicure: "https://cosmeticclinic.net.au/wp-content/uploads/2024/11/reduced_image_smaller.jpg",
-  makeup: "https://img.freepik.com/premium-photo/portrait-beautiful-girl-holding-make-up-brushes_201606-983.jpg",
-  hairSpa: "https://blog.buywow.in/wp-content/uploads/2024/06/jpeg-optimizer_soothing-shampoo-experience-prior-to-stem-cell-hai-2024-04-01-20-00-49-utc-scaled.jpg",
-  nailRefeling: "https://www.relaxationhubatyourplace.com.decideprecisetechnologies.com/assets/images/services/gel-refilling.png",
-  hairStyling: "https://www.mbmmakeupstudio.com/wp-content/uploads/2021/10/hair-styling-course-in-Delhi.jpg",
-  cleanup: "https://www.hopscotch.in/blog/wp-content/uploads/2020/01/Here%E2%80%99s-how-I-do-a-face-clean-up-at-home-by-myself_3.jpg",
-  partyMakeup: "https://www.fiestaservices.co.in/cdn/shop/files/SangeetMakeupLook.png"
-};
-
-const packageData = [
-  {
-    id: 1,
-    image: IMAGES.hairSpa,
-    title: "Hair services"
-  },
-  {
-    id: 2,
-    image: IMAGES.bridalMakeup,
-    title: "Bridal package"
-  },
-  {
-    id: 3,
-    image: IMAGES.cleanup,
-    title: "skin treatments"
-  },
-  {
-    id: 4,
-    image: IMAGES.nailRefeling,
-    title: "nails services"
-  }
-];
-
-const servicesData = [
-  {
-    id: 1,
-    image: IMAGES.bridalMakeup,
-    title: "Bridal makeup",
-    description: "Enhance your beauty with our expert bridal makeup services."
-  },
-  {
-    id: 2,
-    image: IMAGES.hairColor,
-    title: "Hair color",
-    description: "Experience vibrant and natural hair coloring with our expert services."
-  },
-  {
-    id: 3,
-    image: IMAGES.hairWash,
-    title: "Hair wash",
-    description: "Indulge in a refreshing hair wash with a gentle scalp massage."
-  },
-  {
-    id: 4,
-    image: IMAGES.pedicure,
-    title: "Pedicure",
-    description: "Treat your feet to a relaxing pedicure with polished nails."
-  },
-  {
-    id: 5,
-    image: IMAGES.makeup,
-    title: "Makeup",
-    description: "Get professional makeup for any occasion with quality products."
-  },
-  {
-    id: 6,
-    image: IMAGES.hairSpa,
-    title: "Hair spa",
-    description: "Nourish your hair with our rejuvenating hair spa treatments."
-  },
-  {
-    id: 7,
-    image: IMAGES.nailRefeling,
-    title: "Nail refeling",
-    description: "Achieve flawless nails with our expert nail refilling services."
-  },
-  {
-    id: 8,
-    image: IMAGES.hairStyling,
-    title: "Hair styling",
-    description: "Get trendy and classic hair styling tailored to your preferences."
-  },
-  {
-    id: 9,
-    image: IMAGES.cleanup,
-    title: "Cleanup",
-    description: "Deep facial cleanup for a fresh, clear, and glowing complexion."
-  },
-  {
-    id: 10,
-    image: IMAGES.partyMakeup,
-    title: "Party makeup",
-    description: "Stand out at any event with our glamorous party makeup services."
-  }
-];
+import React, { useState, useEffect, useRef } from 'react';
+import { SmallServiceCard } from '../components/ServiceCard';
+import { SubPackagePopup } from '../components/ConfirmationPopup';
+import BookingPopup from '../components/BookingPopup';
+import { carouselCards, serviceCards } from '../assets';
 
 const OurServices = () => {
-  const [current, setCurrent] = useState(0);
-  const cardRef = useRef<HTMLDivElement>(null);
+  // Clone first and last card for infinite loop effect
+  const extendedCards = [carouselCards[carouselCards.length - 1], ...carouselCards, carouselCards[0]];
+  const [current, setCurrent] = useState(1); // Start at 1 because of the prepended clone
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<any>(null);
+  const [bookingPopupOpen, setBookingPopupOpen] = useState(false);
+  const [bookingService, setBookingService] = useState('');
+  const [bookingSubCategory, setBookingSubCategory] = useState('');
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const paragraphRef = useRef<HTMLParagraphElement>(null);
-  const hasAnimatedRef = useRef(false);
-  const greenLineRef = useRef<HTMLSpanElement>(null);
-  const packagesHeadingRef = useRef<HTMLHeadingElement>(null);
-  const packagesContainerRef = useRef<HTMLDivElement>(null);
-  const hasPackagesAnimatedRef = useRef(false);
+  const transitionTime = 500; // ms
 
+  // Auto-slide every 10 seconds
   useEffect(() => {
-    // Animate in the current card
-    if (cardRef.current) {
-      gsap.set(cardRef.current, { x: 200, opacity: 0 });
-      gsap.to(cardRef.current, { x: 0, opacity: 1, duration: 0.7, ease: 'power2.out' });
-    }
-    // Set up timer for next card
-    timeoutRef.current = setTimeout(() => {
-      // Animate out current card
-      if (cardRef.current) {
-        gsap.to(cardRef.current, {
-          x: -200,
-          opacity: 0,
-          duration: 0.7,
-          ease: 'power2.in',
-          onComplete: () => {
-            // If we're at the last card, immediately animate in the first card
-            setCurrent((prev) => {
-              if (prev + 1 === servicesData.length) {
-                // Instantly set to first card and animate in
-                setTimeout(() => {
-                  if (cardRef.current) {
-                    gsap.set(cardRef.current, { x: 200, opacity: 0 });
-                    gsap.to(cardRef.current, { x: 0, opacity: 1, duration: 0.7, ease: 'power2.out' });
-                  }
-                }, 10);
-                return 0;
-              }
-              return prev + 1;
-            });
-          }
-        });
-      } else {
-        setCurrent((prev) => (prev + 1) % servicesData.length);
-      }
-    }, 2000);
+    timeoutRef.current = setInterval(() => {
+      goRight();
+    }, 10000);
     return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      if (timeoutRef.current) {
+        clearInterval(timeoutRef.current);
+      }
     };
-  }, [current]);
-
-  useEffect(() => {
-    // Set initial positions
-    if (headingRef.current) {
-      gsap.set(headingRef.current, { y: 50, opacity: 0 });
-    }
-    if (paragraphRef.current) {
-      gsap.set(paragraphRef.current, { y: 30, opacity: 0 });
-    }
-    if (greenLineRef.current) {
-      gsap.set(greenLineRef.current, { scaleX: 0, opacity: 1 });
-    }
-    if (packagesHeadingRef.current) {
-      gsap.set(packagesHeadingRef.current, { y: 30, opacity: 0 });
-    }
-    if (packagesContainerRef.current) {
-      gsap.set(packagesContainerRef.current, { y: 40, opacity: 0 });
-    }
-
-    // Scroll-triggered animation
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && !hasAnimatedRef.current && (entry.target === headingRef.current || entry.target === paragraphRef.current)) {
-          hasAnimatedRef.current = true;
-          
-          // Animate both elements together
-          if (headingRef.current) {
-            gsap.to(headingRef.current, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' });
-          }
-          if (paragraphRef.current) {
-            gsap.to(paragraphRef.current, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', delay: 0.2 });
-          }
-        }
-        
-        // Animate packages section
-        if (entry.isIntersecting && !hasPackagesAnimatedRef.current && 
-            (entry.target === greenLineRef.current || entry.target === packagesHeadingRef.current || entry.target === packagesContainerRef.current)) {
-          hasPackagesAnimatedRef.current = true;
-          
-          // Animate green line
-          if (greenLineRef.current) {
-            gsap.to(greenLineRef.current, { scaleX: 1, duration: 0.6, ease: 'power2.out' });
-          }
-          
-          // Animate packages heading
-          if (packagesHeadingRef.current) {
-            gsap.to(packagesHeadingRef.current, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', delay: 0.3 });
-          }
-          
-          // Animate packages container
-          if (packagesContainerRef.current) {
-            gsap.to(packagesContainerRef.current, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', delay: 0.5 });
-          }
-        }
-      });
-    }, { threshold: 0.3 });
-
-    if (headingRef.current) observer.observe(headingRef.current);
-    if (paragraphRef.current) observer.observe(paragraphRef.current);
-    if (greenLineRef.current) observer.observe(greenLineRef.current);
-    if (packagesHeadingRef.current) observer.observe(packagesHeadingRef.current);
-    if (packagesContainerRef.current) observer.observe(packagesContainerRef.current);
-
-    return () => observer.disconnect();
   }, []);
 
+  const goLeft = () => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setCurrent((prev) => prev - 1);
+  };
+  const goRight = () => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setCurrent((prev) => prev + 1);
+  };
+
+  // Handle infinite loop effect
+  useEffect(() => {
+    if (!isTransitioning) return;
+    const timer = setTimeout(() => {
+      setIsTransitioning(false);
+      if (current === 0) {
+        setCurrent(extendedCards.length - 2); // Jump to last real card
+      } else if (current === extendedCards.length - 1) {
+        setCurrent(1); // Jump to first real card
+      }
+    }, transitionTime);
+    return () => clearTimeout(timer);
+  }, [current, isTransitioning, extendedCards.length]);
+
+  // Handle click on service card
+  const handleServiceCardClick = (service: any) => {
+    setSelectedService(service);
+    setPopupOpen(true);
+  };
+
+  // Handle click on carousel card
+  const handleCarouselCardClick = (card: any) => {
+    // Try to find a matching serviceCard by serviceKey for consistency
+    const match = serviceCards.find(s => s.serviceKey === card.serviceKey);
+    setSelectedService(match || card);
+    setPopupOpen(true);
+  };
+
+  // Handle Book Now click in sub-card
+  const handleBookNow = (service: any, sub: any) => {
+    setPopupOpen(false);
+    setBookingService(service.title);
+    setBookingSubCategory(sub.title);
+    setBookingPopupOpen(true);
+  };
+
   return (
-    <section id="our-services" className="min-h-screen pt-8 pb-8 sm:pb-10 overflow-hidden">
-      <div className="mx-auto max-w-2xl ">
-        {/* Header */}
-        <div className="text-center px-4">
-          <h1 ref={headingRef} className="text-4xl md:text-5xl font-bold mb-6 text-green-700 opacity-0">Our Services</h1>
-          <p ref={paragraphRef} className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto opacity-0">
-            Discover our comprehensive range of professional hair and beauty services designed to enhance your natural beauty.
-          </p>
-        </div>
-        {/* Slider Container */}
-        <div className="relative flex justify-center items-center min-h-[400px] mt-5 overflow-hidden">
-          <div
-            ref={cardRef}
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-md flex justify-center items-center sm:w-[80vw] md:w-[70vw] lg:w-[60vw]"
-          >
-            <ServiceCard
-              image={servicesData[current].image}
-              title={servicesData[current].title}
-              description={servicesData[current].description}
-            />
-          </div>
-        </div>
-        {/* Green Line Separator */}
-        <div className="mt-4 mb-6 flex justify-center">
-          <span ref={greenLineRef} className="h-0.5 bg-green-600 w-20 rounded-2xl block"></span>
-        </div>
-        
-        {/* Package Cards - Mobile Only */}
-        <div className="md:hidden">
-          <h2 ref={packagesHeadingRef} className="text-2xl font-bold my-8 text-green-700 text-center opacity-0 ">Special Packages</h2>
-          <div ref={packagesContainerRef} className="grid grid-cols-2 gap-4 px-4 opacity-0 items-stretch">
-            {packageData.map((pkg, index) => (
-              <PackageCard
-                key={pkg.id}
-                image={pkg.image}
-                title={pkg.title}
-                delay={index * 0.1}
-              />
-            ))}
-          </div>
+    <section id="our-services" className="pb-8 py-2 px-1">
+      <h2 className="text-2xl font-bold text-black mb-1 pt-2 px-4 text-left">Explore Other Services</h2>
+      <div className="h-1 bg-green-600 rounded-full ml-4 mb-5 w-1/2 max-w-xs"></div>
+      <div className="flex justify-center">
+        <div className="flex flex-wrap justify-center gap-3 w-full max-w-5xl">
+          {serviceCards.map((card, idx) => (
+            <div key={idx} onClick={() => handleServiceCardClick(card)} className="cursor-pointer">
+              <SmallServiceCard image={card.image} title={card.title} />
+            </div>
+          ))}
         </div>
       </div>
+
+      {/* Carousel Section */}
+      <div className="w-full flex justify-center mt-8 sm:mt-16">
+        <div className="relative w-full flex justify-center">
+          {/* Left Arrow */}
+          <button
+            onClick={goLeft}
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-gray-200 rounded-full shadow p-1 w-7 h-7 flex items-center justify-center hover:bg-gray-300 focus:outline-none"
+            aria-label="Previous"
+          >
+            <span className="text-lg font-bold">{'<'}</span>
+          </button>
+          {/* Card - Only One Visible at a Time, Infinite Loop */}
+          <div className="w-full max-w-xl px-8 overflow-hidden">
+            <div
+              className={`relative flex transition-transform duration-500`}
+              style={{
+                width: `${extendedCards.length * 100}%`,
+                transform: `translateX(-${current * (100 / extendedCards.length)}%)`,
+                transition: isTransitioning ? `transform ${transitionTime}ms` : 'none',
+              }}
+            >
+              {extendedCards.map((card, idx) => (
+                <div
+                  key={idx}
+                  className="bg-white px-4 rounded-2xl overflow-hidden flex items-center justify-center p-0 min-h-[160px] aspect-video cursor-pointer"
+                  style={{ width: `${100 / extendedCards.length}%` }}
+                  onClick={() => handleCarouselCardClick(card)}
+                >
+                  <img
+                    src={card.image}
+                    alt="carousel slide"
+                    className="w-full h-full object-cover rounded-2xl"
+                    style={{ aspectRatio: '16/9' }}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+          {/* Right Arrow */}
+          <button
+            onClick={goRight}
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-gray-200 rounded-full shadow p-1 w-7 h-7 flex items-center justify-center hover:bg-gray-300 focus:outline-none"
+            aria-label="Next"
+          >
+            <span className="text-lg font-bold">{'>'}</span>
+          </button>
+        </div>
+      </div>
+
+      {/* SubPackage Popup */}
+      <SubPackagePopup open={popupOpen} onClose={() => setPopupOpen(false)}>
+        {selectedService && (
+          <div>
+            <h3 className="text-xl font-bold text-green-700 mb-4 text-center">{selectedService.title || selectedService.serviceKey}</h3>
+            <div className="flex flex-col gap-4 max-h-[60vh] overflow-y-auto pr-1">
+              {selectedService.subPackages && selectedService.subPackages.map((sub: any) => (
+                <div key={sub.key} className="bg-gray-300 rounded-xl px-4 py-5 pb-4 flex min-h-[140px] gap-4 items-start">
+                  <div className="flex-shrink-0 w-20 h-20 bg-gray-200 rounded-lg overflow-hidden flex items-center justify-center">
+                    {sub.image ? (
+                      <img src={sub.image} alt={sub.title} className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-gray-400 text-xs">No Image</span>
+                    )}
+                  </div>
+                  <div className="flex-1 flex flex-col gap-2 min-w-0 h-full">
+                    <span className="font-semibold text-gray-800 mb-1 block text-base sm:text-base text-sm leading-tight line-clamp-2">{sub.title}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-green-600 font-bold text-base">₹{sub.discountedPrice}</span>
+                      <span className="text-gray-400 line-through text-xs">₹{sub.price}</span>
+                    </div>
+                    <button onClick={() => handleBookNow(selectedService, sub)} className="px-3 py-1.5 w-full mb-2 bg-gradient-to-r from-green-400 via-green-500 to-green-600 text-white rounded-lg font-semibold shadow-lg hover:from-green-500 hover:to-green-700 transition-all text-xs whitespace-nowrap relative overflow-hidden">
+                      <span className="">Book Now</span>
+                      <span className="absolute inset-0 bg-white/20 opacity-60 rounded-lg pointer-events-none animate-pulse" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </SubPackagePopup>
+
+      {/* Booking Popup */}
+      <BookingPopup
+        open={bookingPopupOpen}
+        onClose={() => {
+          setBookingPopupOpen(false);
+          setBookingService('');
+          setBookingSubCategory('');
+        }}
+        service={bookingService}
+        subCategory={bookingSubCategory}
+      />
     </section>
   );
 };
