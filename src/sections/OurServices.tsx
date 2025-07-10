@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { SmallServiceCard } from '../components/ServiceCard';
 import { SubPackagePopup } from '../components/ConfirmationPopup';
 import BookingPopup from '../components/BookingPopup';
