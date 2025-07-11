@@ -247,7 +247,7 @@ const Contact = () => {
   };
 
   return (
-    <section ref={sectionRef} id="contact" className="min-h-screen flex flex-col justify-center items-center overflow-hidden pb-4">
+    <section ref={sectionRef} id="contact" className="min-h-screen flex flex-col justify-center items-center overflow-hidden pb-4 pt-0">
       {isSubmitting && <LoaderPopup />}
       {showConfirmation && (
         <ConfirmationPopup
@@ -257,11 +257,11 @@ const Contact = () => {
           type="success"
         />
       )}
-      <div className="w-full max-w-xl rounded-3xl p-8 relative">
-        <h1 className="text-4xl sm:mt-6 font-bold mb-2 text-green-700 w-full text-center block">
-          <span className="glossy-green-text">Let's Connect</span>
+      <div className="w-full max-w-xl rounded-3xl p-8 pt-0 relative">
+        <h1 className="text-4xl font-bold mb-2 text-black w-full text-left block">
+          <span>Let's Connect</span>
         </h1>
-        <p className="text-md text-gray-600 mb-6 sm:mb-12 text-center">Your info is <span className="font-semibold text-green-700">100% safe</span>.</p>
+        <div className="h-1 bg-green-600 rounded-full mb-6 w-1/2 max-w-xs"></div>
         <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-y-5">
           {error && <div className="text-red-500 text-center mb-2">{error}</div>}
           <div className="flex flex-col sm:flex-row gap-3">

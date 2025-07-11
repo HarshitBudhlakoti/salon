@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { SmallServiceCard } from '../components/ServiceCard';
 import { SubPackagePopup } from '../components/ConfirmationPopup';
 import BookingPopup from '../components/BookingPopup';
-import { carouselCards, serviceCards } from '../assets';
+import { carouselCards, serviceCards, serviceCardsDesktop } from '../assets';
 import { planCards } from '../assets';
 
 const OurServices = () => {
@@ -111,9 +111,10 @@ const OurServices = () => {
 
   return (
     <section id="our-services" className="pb-8 py-2 px-1">
-      <h2 className="text-2xl font-bold text-black mb-1 pt-2 px-4 text-left">Explore Other Services</h2>
-      <div className="h-1 bg-green-600 rounded-full ml-4 mb-5 w-1/2 max-w-xs"></div>
-      <div className="flex justify-center">
+      <h2 className="text-2xl md:text-3xl font-bold text-black md:text-center md:w-full md:mt-8 mb-1 pt-2 px-4 text-left">Explore Other Services</h2>
+      <div className="h-1 bg-green-600 rounded-full ml-4 mb-5 w-1/2 max-w-xs md:mx-auto md:mb-8"></div>
+      {/* Mobile/Tablet: 6 cards, flex-wrap */}
+      <div className="md:hidden">
         <div className="flex flex-wrap justify-center gap-3 w-full max-w-5xl">
           {serviceCards.map((card, idx) => (
             <div key={idx} onClick={() => handleServiceCardClick(card)} className="cursor-pointer">
@@ -122,9 +123,16 @@ const OurServices = () => {
           ))}
         </div>
       </div>
-
-      {/* Carousel Section */}
-      <div className="w-full flex justify-center mt-8 sm:mt-16">
+      {/* Desktop: 10 cards, 2 rows x 5 columns grid */}
+      <div className="hidden md:grid grid-cols-5 grid-rows-2 gap-6 w-full max-w-5xl mx-auto">
+        {serviceCardsDesktop.map((card, idx) => (
+          <div key={idx} onClick={() => handleServiceCardClick(card)} className="cursor-pointer">
+            <SmallServiceCard image={card.image} title={card.title} />
+          </div>
+        ))}
+      </div>
+      {/* Carousel Section: only on mobile/tablet */}
+      <div className="w-full flex justify-center mt-8 sm:mt-16 md:hidden">
         <div className="relative w-full flex justify-center">
           {/* Typing effect absolutely over the carousel card */}
           <div className="absolute left-1/2 bottom-6 z-20" style={{ transform: 'translateX(-50%)', pointerEvents: 'none', width: '100%', maxWidth: 480 }}>

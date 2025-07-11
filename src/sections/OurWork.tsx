@@ -35,10 +35,10 @@ function VideoShowcaseSection() {
   }, [modalOpen]);
 
   return (
-    <div className="mb-6">
-      <h2 className="text-2xl font-bold text-black mb-2 px-4 text-left">Our Work in Action</h2>
-      <div className="h-1 bg-green-600 rounded-full ml-4 mb-5 w-1/2 max-w-xs"></div>
-      <div className="overflow-x-auto scrollbar-hide flex gap-6 px-4 pb-2" style={{ WebkitOverflowScrolling: 'touch' }}>
+    <div className="">
+      <h2 className="text-2xl md:text-3xl font-bold text-black mb-2 px-4 text-left md:text-center md:px-0 md:mb-8">Us in Action</h2>
+      <div className="h-1 bg-green-600 rounded-full ml-4 mb-5 md:hidden max-w-xs w-1/2 md:ml-0"></div>
+      <div className="overflow-x-auto scrollbar-hide flex gap-6 px-4 pb-2 md:justify-center md:px-0" style={{ WebkitOverflowScrolling: 'touch' }}>
         {videos.trendingServiceVideos.map((vid: TrendingServiceVideo) => (
           <VideoCard
             key={vid.key}
@@ -108,7 +108,7 @@ function FeedbackSliderSection() {
     return () => clearInterval(interval);
   }, [isReversing]);
   return (
-    <div ref={reviewSectionRef} className="mt-14 pb-4">
+    <div ref={reviewSectionRef} className="mt-6 mb-0 pb-0">
       {/* Smooth Back and Forth Carousel */}
       <div className={`relative max-w-7xl mx-auto overflow-hidden transition-all duration-700 ${isReviewSectionInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
         <div className="flex justify-center">
@@ -155,7 +155,7 @@ function VideoCard({ videoUrl, title, onClick }: VideoCardProps & { thumbnail?: 
   const thumbnail = videoObj?.thumbnail || images.thumbnails.default;
   return (
     <div
-      className="relative flex-shrink-0 w-[180px] h-[320px] rounded-2xl overflow-hidden bg-gray-200 shadow-lg cursor-pointer group"
+      className="relative flex-shrink-0 w-[220px] h-[320px] rounded-2xl overflow-hidden bg-gray-200 shadow-lg cursor-pointer group"
       style={{ aspectRatio: '9/16', backgroundImage: `url('${thumbnail}')`, backgroundSize: 'cover', backgroundPosition: 'center' }}
       onClick={onClick}
     >
