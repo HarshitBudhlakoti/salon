@@ -13,8 +13,15 @@ export const images = {
         'https://ik.imagekit.io/0mx6y4v8p/image.webp',
     ],
     logoText: 'https://res.cloudinary.com/dfm2w0hov/image/upload/v1751350516/logoT_va8m36.png',
-    logo: 'https://ik.imagekit.io/0mx6y4v8p/logo.webp'
-    // Add more keys like gallery, thumbnails, etc. as needed
+    logo: 'https://ik.imagekit.io/0mx6y4v8p/logo.webp',
+    // Thumbnails for video cards
+    thumbnails: {
+      keratin: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80',
+      bridal: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=400&q=80',
+      coloring: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
+      facial: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=400&q=80',
+      default: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80',
+    },
 };
 
 // Example video URLs as an object
@@ -60,24 +67,22 @@ export const videos = {
     ],
     trendingServiceVideos: [
       {
-        key: 'keratin',
-        video: 'https://vz-fe419fbf-87f.b-cdn.net/979596bc-ea4a-4805-8bb4-87409170e885/playlist.m3u8',
-        title: 'Keratin Treatment',
+        key: 'gold-facial',
+        video: 'https://res.cloudinary.com/dfm2w0hov/video/upload/v1752218097/effortless_1_utb3s9.mp4',
+        title: 'Gold Facial',
+        thumbnail: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=400&q=80',
       },
       {
-        key: 'bridal',
-        video: 'https://vz-fe419fbf-87f.b-cdn.net/979596bc-ea4a-4805-8bb4-87409170e885/playlist.m3u8',
-        title: 'Bridal Makeup',
+        key: 'pedicure',
+        video: 'https://res.cloudinary.com/dfm2w0hov/video/upload/v1752218096/effortlesss_3_mzhpuk.mp4',
+        title: 'Pedicure',
+        thumbnail: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
       },
       {
-        key: 'coloring',
-        video: 'https://vz-fe419fbf-87f.b-cdn.net/979596bc-ea4a-4805-8bb4-87409170e885/playlist.m3u8',
-        title: 'Hair Coloring',
-      },
-      {
-        key: 'facial',
-        video: 'https://vz-fe419fbf-87f.b-cdn.net/979596bc-ea4a-4805-8bb4-87409170e885/playlist.m3u8',
-        title: 'Luxury Facial',
+        key: 'manicure',
+        video: 'https://res.cloudinary.com/dfm2w0hov/video/upload/v1752218096/efortless_2_i8rega.mp4',
+        title: 'Manicure',
+        thumbnail: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80',
       },
     ],
 };
@@ -189,6 +194,39 @@ export const carouselCards = [
       { key: 'cocktail', image: '', title: 'Cocktail Makeup', price: 1799, discountedPrice: 1299 },
       { key: 'reception', image: '', title: 'Reception Makeup', price: 1999, discountedPrice: 1499 },
     ],
+  },
+];
+
+export const feedbacks = [
+  {
+    image: images.heroimages[0],
+    name: 'Aarav Sharma',
+    rating: 5,
+    feedback: 'Amazing service! The staff was very professional and friendly. Highly recommended.'
+  },
+  {
+    image: images.heroimages[1],
+    name: 'Priya Verma',
+    rating: 4,
+    feedback: 'Loved the ambiance and the quality of work. Will visit again!'
+  },
+  {
+    image: images.heroimages[2],
+    name: 'Rohit Singh',
+    rating: 5,
+    feedback: 'Best salon experience I have had in years. The team is fantastic.'
+  },
+  {
+    image: images.heroimages[3],
+    name: 'Sneha Kapoor',
+    rating: 5,
+    feedback: 'Very clean and hygienic. The services exceeded my expectations.'
+  },
+  {
+    image: images.heroimages[4],
+    name: 'Vikram Mehra',
+    rating: 4,
+    feedback: 'Great value for money. The staff is courteous and skilled.'
   },
 ];
 

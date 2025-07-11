@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { SmallServiceCard } from '../components/ServiceCard';
 import { SubPackagePopup } from '../components/ConfirmationPopup';
 import BookingPopup from '../components/BookingPopup';
@@ -77,6 +77,47 @@ const OurServices = () => {
     setBookingPopupOpen(true);
   };
 
+  // Typing effect for carousel card title
+  const [typedText, setTypedText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [typingIdx, setTypingIdx] = useState(0); // not used, but for future multi-text
+  const [cursorVisible, setCursorVisible] = useState(true);
+  const prevTitleRef = useRef('');
+  const currentTitle = extendedCards[current]?.title || '';
+  // Typing effect logic
+  useEffect(() => {
+    let typingTimeout: NodeJS.Timeout;
+    if (prevTitleRef.current !== currentTitle) {
+      setTypedText('');
+      setIsDeleting(false);
+      prevTitleRef.current = currentTitle;
+    }
+    if (!isDeleting && typedText.length < currentTitle.length) {
+      typingTimeout = setTimeout(() => {
+        setTypedText(currentTitle.slice(0, typedText.length + 1));
+      }, 70);
+    } else if (!isDeleting && typedText.length === currentTitle.length) {
+      typingTimeout = setTimeout(() => setIsDeleting(true), 1200);
+    } else if (isDeleting && typedText.length > 0) {
+      typingTimeout = setTimeout(() => {
+        setTypedText(currentTitle.slice(0, typedText.length - 1));
+      }, 40);
+    } else if (isDeleting && typedText.length === 0) {
+      typingTimeout = setTimeout(() => {
+        setIsDeleting(false);
+        // setTypingIdx((prev) => (prev + 1) % 1); // only one text
+      }, 400);
+    }
+    return () => clearTimeout(typingTimeout);
+  }, [typedText, isDeleting, currentTitle]);
+  // Blinking cursor effect
+  useEffect(() => {
+    const cursorInterval = setInterval(() => {
+      setCursorVisible((v) => !v);
+    }, 500);
+    return () => clearInterval(cursorInterval);
+  }, []);
+
   return (
     <section id="our-services" className="pb-8 py-2 px-1">
       <h2 className="text-2xl font-bold text-black mb-1 pt-2 px-4 text-left">Explore Other Services</h2>
@@ -94,6 +135,38 @@ const OurServices = () => {
       {/* Carousel Section */}
       <div className="w-full flex justify-center mt-8 sm:mt-16">
         <div className="relative w-full flex justify-center">
+          {/* Typing effect absolutely over the carousel card */}
+          <div className="absolute left-1/2 top-1/2 z-20" style={{ transform: 'translate(-50%, -50%)', pointerEvents: 'none', width: '100%', maxWidth: 480 }}>
+            <span
+              style={{
+                fontWeight: 'bold',
+                color: 'white',
+                fontSize: '2rem',
+                textShadow: '0 2px 8px #000, 0 0px 2px #000',
+                letterSpacing: '0.02em',
+                display: 'inline-block',
+                minWidth: '6ch',
+                userSelect: 'none',
+                textAlign: 'center',
+                width: '100%',
+              }}
+              className="block text-center"
+            >
+              {typedText}
+              <span style={{
+                display: 'inline-block',
+                width: '1ch',
+                color: 'white',
+                opacity: cursorVisible ? 1 : 0,
+                fontWeight: 'bold',
+                fontSize: '2rem',
+                verticalAlign: 'bottom',
+                transition: 'opacity 0.2s',
+              }}>
+                |
+              </span>
+            </span>
+          </div>
           {/* Left Arrow */}
           <button
             onClick={goLeft}
@@ -247,9 +320,7 @@ function PlanCarouselSection() {
 
   const handleDotClick = (idx: number) => {
     setCurrent(idx);
-    if (timeoutRef.current) {
-      clearInterval(timeoutRef.current);
-    }
+    // Do NOT clear the interval here so auto sliding continues
   };
 
   // --- Render ---
