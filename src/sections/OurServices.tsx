@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { SmallServiceCard } from '../components/ServiceCard';
 import { SubPackagePopup } from '../components/ConfirmationPopup';
 import BookingPopup from '../components/BookingPopup';
@@ -80,7 +80,8 @@ const OurServices = () => {
   // Typing effect for carousel card title
   const [typedText, setTypedText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
-  const [typingIdx, setTypingIdx] = useState(0); // not used, but for future multi-text
+  // const [typingIdx, setTypingIdx] = useState(0);
+   // not used, but for future multi-text
   const [cursorVisible, setCursorVisible] = useState(true);
   const prevTitleRef = useRef('');
   const currentTitle = extendedCards[current]?.title || '';

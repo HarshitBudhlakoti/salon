@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { videos, images } from '../assets';
 import FeedbackCard from '../components/FeedbackCard';
 import { feedbacks } from '../assets';
