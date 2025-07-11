@@ -192,4 +192,61 @@ export const carouselCards = [
   },
 ];
 
+export const planCards = [
+  {
+    key: 'platinum',
+    image: 'https://cdn-icons-png.flaticon.com/512/616/616494.png',
+    title: 'Platinum',
+    subtitle: 'Premium Benefits - Valid For 3 Months',
+    features: [
+      '20% Flat Discount on Every Order upto 199',
+      'Full Amount Credited to Salontym Wallet',
+      'No Prime Time or Transportation Charges',
+      'Receive 3000 Salontym Coins',
+      'Get an extra 3 months to claim your services.',
+      'Top-rated professionals: 4.8+ Ratings, 100+ bookings experience.'
+    ],
+    price: 999,
+    originalPrice: 1999,
+    save: 1000,
+    button: 'Subscribe',
+  },
+  {
+    key: 'gold',
+    image: 'https://cdn-icons-png.flaticon.com/512/1828/1828884.png',
+    title: 'Gold',
+    subtitle: 'Unlock Exclusive Benefits & Savings - Valid For 3 Months',
+    features: [
+      '10% Flat Discount on Every Order upto 99',
+      'Full Amount Credited to Salontym Wallet',
+      'No Prime Time or Transportation Charges',
+      'Receive 2000 Salontym Coins',
+      'Get an extra 3 months to claim your services',
+      'Top-rated professionals'
+    ],
+    price: 499,
+    originalPrice: 1499,
+    save: 1000,
+    button: 'Subscribe',
+  },
+  {
+    key: 'diamond',
+    image: 'https://cdn-icons-png.flaticon.com/512/1828/1828970.png',
+    title: 'Diamond',
+    subtitle: 'Maximize Your Savings & Benefits - Valid For 3 Months',
+    features: [
+      '15% Flat Discount on Every Order upto 149',
+      'Full Amount Credited to Salontym Wallet',
+      'No Prime Time or Transportation Charges',
+      'Receive 3000 Salontym Coins',
+      'Get an extra 3 months to claim your services.',
+      'Top-rated professionals'
+    ],
+    price: 699,
+    originalPrice: 1699,
+    save: 1000,
+    button: 'Subscribe',
+  },
+];
+
 // Add more asset arrays or constants as needed, e.g. for icons, audio, etc. 

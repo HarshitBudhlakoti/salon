@@ -3,6 +3,7 @@ import { SmallServiceCard } from '../components/ServiceCard';
 import { SubPackagePopup } from '../components/ConfirmationPopup';
 import BookingPopup from '../components/BookingPopup';
 import { carouselCards, serviceCards } from '../assets';
+import { planCards } from '../assets';
 
 const OurServices = () => {
   // Clone first and last card for infinite loop effect
@@ -183,8 +184,157 @@ const OurServices = () => {
         service={bookingService}
         subCategory={bookingSubCategory}
       />
+
+      {/* --- Plan Carousel Section --- */}
+      <PlanCarouselSection />
     </section>
   );
 };
 
 export default OurServices;
+
+// --- PlanCarouselSection ---
+
+function PlanCarouselSection() {
+  const [current, setCurrent] = useState(0);
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
+  const [cardsPerView, setCardsPerView] = useState(1);
+  const [direction, setDirection] = useState(1); // 1 = forward, -1 = backward
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const transitionTime = 5000; // ms
+  const CARD_WIDTH = 350; // px
+
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth >= 1024) {
+        setIsLargeScreen(true);
+        setCardsPerView(1); // not used on large screen
+      } else {
+        setIsLargeScreen(false);
+        setCardsPerView(1);
+      }
+    }
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const totalSlides = Math.ceil(planCards.length / cardsPerView);
+
+  useEffect(() => {
+    if (isLargeScreen) return;
+    timeoutRef.current = setInterval(() => {
+      setCurrent((prev) => {
+        if (direction === 1) {
+          if (prev === totalSlides - 1) {
+            setDirection(-1);
+            return prev - 1;
+          }
+          return prev + 1;
+        } else {
+          if (prev === 0) {
+            setDirection(1);
+            return prev + 1;
+          }
+          return prev - 1;
+        }
+      });
+    }, transitionTime);
+    return () => {
+      if (timeoutRef.current) clearInterval(timeoutRef.current);
+    };
+  }, [cardsPerView, direction, totalSlides, isLargeScreen]);
+
+  const handleDotClick = (idx: number) => {
+    setCurrent(idx);
+    if (timeoutRef.current) {
+      clearInterval(timeoutRef.current);
+    }
+  };
+
+  // --- Render ---
+  if (isLargeScreen) {
+    return (
+      <div className="w-full bg-green-700 py-10 flex flex-col items-center mt-10">
+        <div className="text-xl sm:text-2xl text-white italic text-center mb-2">Choose Your Plan</div>
+        <div className="text-2xl sm:text-3xl font-bold text-white text-center mb-8">Unlock Unbelievable Savings</div>
+        <div className="flex justify-center gap-6">
+          {planCards.map((card) => (
+            <div key={card.key} style={{ width: CARD_WIDTH }} className="flex-shrink-0 flex justify-center items-center">
+              <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 w-full flex flex-col items-center">
+                <div className="flex items-center mb-2">
+                  <img src={card.image} alt={card.title} className="w-10 h-10 mr-2" />
+                  <span className="text-2xl font-bold text-black">{card.title}</span>
+                </div>
+                <div className="font-semibold text-gray-800 text-center mb-2">{card.subtitle}</div>
+                <ul className="text-left text-sm  mb-4">
+                  {card.features.map((f, i) => (
+                    <li key={i} className="flex items-start mb-1"><span className="text-green-600 mr-2">✓</span>{f}</li>
+                  ))}
+                </ul>
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-xl font-bold">₹{card.price}</span>
+                  <span className="text-gray-400 line-through text-base">₹{card.originalPrice}</span>
+                  <span className="text-black font-semibold">Save <span className="text-green-700">₹{card.save}</span></span>
+                </div>
+                <button className="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold shadow hover:bg-green-700 transition-all">{card.button}</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // --- Mobile/Small screen: Carousel ---
+  return (
+    <div className="w-full bg-green-700 py-10 flex flex-col items-center mt-10">
+      <div className="text-2xl sm:text-3xl font-bold text-white text-center mb-8">Unlock Unbelievable Savings</div>
+      <div className="w-full flex justify-center">
+        <div className="relative overflow-hidden" style={{ width: CARD_WIDTH }}>
+          <div
+            className="flex transition-transform duration-700 gap-6"
+            style={{
+              width: planCards.length * CARD_WIDTH + (planCards.length - 1) * 24, // 24px = gap-6
+              transform: `translateX(-${current * (CARD_WIDTH + 24)}px)`
+            }}
+          >
+            {planCards.map((card) => (
+              <div key={card.key} style={{ width: CARD_WIDTH }} className="flex-shrink-0 flex justify-center items-center">
+                <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 w-full flex flex-col items-center">
+                  <div className="flex items-center mb-2">
+                    <img src={card.image} alt={card.title} className="w-10 h-10 mr-2" />
+                    <span className="text-2xl font-bold text-black">{card.title}</span>
+                  </div>
+                  <div className="font-semibold text-gray-800 text-center mb-2">{card.subtitle}</div>
+                  <ul className="text-left text-sm mb-4">
+                    {card.features.map((f, i) => (
+                      <li key={i} className="flex items-start mb-1"><span className="text-green-600 mr-2">✓</span>{f}</li>
+                    ))}
+                  </ul>
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="text-xl font-bold">₹{card.price}</span>
+                    <span className="text-gray-400 line-through text-base">₹{card.originalPrice}</span>
+                    <span className="text-black font-semibold">Save <span className="text-green-700">₹{card.save}</span></span>
+                  </div>
+                  <button className="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold shadow hover:bg-green-700 transition-all">{card.button}</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      {/* Dots Navigation */}
+      <div className="flex gap-3 mt-6">
+        {Array.from({ length: totalSlides }).map((_, idx) => (
+          <button
+            key={idx}
+            className={`w-4 h-4 rounded-full border-2 border-white ${current === idx ? 'bg-white' : 'bg-green-500'} transition-all`}
+            onClick={() => handleDotClick(idx)}
+            aria-label={`Go to plan slide ${idx + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
