@@ -26,7 +26,8 @@ export const images = {
 
 // Example video URLs as an object
 export const videos = {
-    herovideo: 'https://res.cloudinary.com/dfm2w0hov/video/upload/v1751391836/heroVideo_kejldw.mp4',
+    herovideoMobile: 'https://res.cloudinary.com/dfm2w0hov/video/upload/v1752226310/mobile-1743684721264_1_1_gcwtfn.mp4',
+    herovideoDesktop: 'https://res.cloudinary.com/dfm2w0hov/video/upload/v1752226308/web-1743684721247_x2tuas.mp4',
     // Add more keys like nailcardvideo, haircutvideo, etc. as needed
     offercardvideos: [
       {
@@ -237,11 +238,11 @@ export const planCards = [
     title: 'Platinum',
     subtitle: 'Premium Benefits - Valid For 3 Months',
     features: [
-      '20% Flat Discount on Every Order upto 199',
-      'Full Amount Credited to Salontym Wallet',
-      'No Prime Time or Transportation Charges',
-      'Receive 3000 Salontym Coins',
-      'Get an extra 3 months to claim your services.',
+      '20% Flat Discount on Every Service, up to ₹199',
+      'Exclusive savings on Bridal Makeup, Hair Color, Spa, and more',
+      'Priority booking for special occasions',
+      'Access to premium stylists and makeup artists',
+      'Flexible scheduling and rescheduling',
       'Top-rated professionals: 4.8+ Ratings, 100+ bookings experience.'
     ],
     price: 999,
@@ -255,12 +256,12 @@ export const planCards = [
     title: 'Gold',
     subtitle: 'Unlock Exclusive Benefits & Savings - Valid For 3 Months',
     features: [
-      '10% Flat Discount on Every Order upto 99',
-      'Full Amount Credited to Salontym Wallet',
-      'No Prime Time or Transportation Charges',
-      'Receive 2000 Salontym Coins',
-      'Get an extra 3 months to claim your services',
-      'Top-rated professionals'
+      '10% Flat Discount on Every Service, up to ₹99',
+      'Special offers on Hair Spa, Pedicure, and Party Makeup',
+      'Priority support for bookings and queries',
+      'Flexible scheduling and rescheduling',
+      'Top-rated professionals for all services',
+      'Perfect for regular salon visitors'
     ],
     price: 499,
     originalPrice: 1499,
@@ -273,12 +274,12 @@ export const planCards = [
     title: 'Diamond',
     subtitle: 'Maximize Your Savings & Benefits - Valid For 3 Months',
     features: [
-      '15% Flat Discount on Every Order upto 149',
-      'Full Amount Credited to Salontym Wallet',
-      'No Prime Time or Transportation Charges',
-      'Receive 3000 Salontym Coins',
-      'Get an extra 3 months to claim your services.',
-      'Top-rated professionals'
+      '15% Flat Discount on Every Service, up to ₹149',
+      'Best value for Bridal, Hair, and Spa packages',
+      'Priority booking and dedicated support',
+      'Access to premium stylists and makeup artists',
+      'Flexible scheduling and rescheduling',
+      'Top-rated professionals for all your needs'
     ],
     price: 699,
     originalPrice: 1699,

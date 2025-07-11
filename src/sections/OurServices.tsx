@@ -22,7 +22,7 @@ const OurServices = () => {
   useEffect(() => {
     timeoutRef.current = setInterval(() => {
       goRight();
-    }, 10000);
+    }, 3000);
     return () => {
       if (timeoutRef.current) {
         clearInterval(timeoutRef.current);
@@ -79,7 +79,8 @@ const OurServices = () => {
 
   // Typing effect for carousel card title
   const [typedText, setTypedText] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
+  // Remove isDeleting state
+  // const [isDeleting, setIsDeleting] = useState(false);
   // const [typingIdx, setTypingIdx] = useState(0);
    // not used, but for future multi-text
   const [cursorVisible, setCursorVisible] = useState(true);
@@ -90,27 +91,16 @@ const OurServices = () => {
     let typingTimeout: NodeJS.Timeout;
     if (prevTitleRef.current !== currentTitle) {
       setTypedText('');
-      setIsDeleting(false);
       prevTitleRef.current = currentTitle;
     }
-    if (!isDeleting && typedText.length < currentTitle.length) {
+    if (typedText.length < currentTitle.length) {
       typingTimeout = setTimeout(() => {
         setTypedText(currentTitle.slice(0, typedText.length + 1));
       }, 70);
-    } else if (!isDeleting && typedText.length === currentTitle.length) {
-      typingTimeout = setTimeout(() => setIsDeleting(true), 1200);
-    } else if (isDeleting && typedText.length > 0) {
-      typingTimeout = setTimeout(() => {
-        setTypedText(currentTitle.slice(0, typedText.length - 1));
-      }, 40);
-    } else if (isDeleting && typedText.length === 0) {
-      typingTimeout = setTimeout(() => {
-        setIsDeleting(false);
-        // setTypingIdx((prev) => (prev + 1) % 1); // only one text
-      }, 400);
     }
+    // No deleting effect anymore
     return () => clearTimeout(typingTimeout);
-  }, [typedText, isDeleting, currentTitle]);
+  }, [typedText, currentTitle]);
   // Blinking cursor effect
   useEffect(() => {
     const cursorInterval = setInterval(() => {
@@ -137,7 +127,7 @@ const OurServices = () => {
       <div className="w-full flex justify-center mt-8 sm:mt-16">
         <div className="relative w-full flex justify-center">
           {/* Typing effect absolutely over the carousel card */}
-          <div className="absolute left-1/2 top-1/2 z-20" style={{ transform: 'translate(-50%, -50%)', pointerEvents: 'none', width: '100%', maxWidth: 480 }}>
+          <div className="absolute left-1/2 bottom-6 z-20" style={{ transform: 'translateX(-50%)', pointerEvents: 'none', width: '100%', maxWidth: 480 }}>
             <span
               style={{
                 fontWeight: 'bold',
@@ -171,10 +161,10 @@ const OurServices = () => {
           {/* Left Arrow */}
           <button
             onClick={goLeft}
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-gray-200 rounded-full shadow p-1 w-7 h-7 flex items-center justify-center hover:bg-gray-300 focus:outline-none"
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-gray-200 rounded-full shadow p-1 w-10 h-10 flex items-center justify-center hover:bg-gray-300 focus:outline-none"
             aria-label="Previous"
           >
-            <span className="text-lg font-bold">{'<'}</span>
+            <span className="text-3xl font-extrabold">{'<'}</span>
           </button>
           {/* Card - Only One Visible at a Time, Infinite Loop */}
           <div className="w-full max-w-xl px-8 overflow-hidden">
@@ -206,10 +196,10 @@ const OurServices = () => {
           {/* Right Arrow */}
           <button
             onClick={goRight}
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-gray-200 rounded-full shadow p-1 w-7 h-7 flex items-center justify-center hover:bg-gray-300 focus:outline-none"
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-gray-200 rounded-full shadow p-1 w-10 h-10 flex items-center justify-center hover:bg-gray-300 focus:outline-none"
             aria-label="Next"
           >
-            <span className="text-lg font-bold">{'>'}</span>
+            <span className="text-3xl font-extrabold">{'>'}</span>
           </button>
         </div>
       </div>
@@ -277,6 +267,9 @@ function PlanCarouselSection() {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const transitionTime = 5000; // ms
   const CARD_WIDTH = 350; // px
+  // Booking popup state for plan cards
+  const [bookingPopupOpen, setBookingPopupOpen] = useState(false);
+  const [bookingService, setBookingService] = useState('');
 
   useEffect(() => {
     function handleResize() {
@@ -324,6 +317,12 @@ function PlanCarouselSection() {
     // Do NOT clear the interval here so auto sliding continues
   };
 
+  // Book Now handler for plan cards
+  const handleBookNow = (planTitle: string) => {
+    setBookingService(planTitle);
+    setBookingPopupOpen(true);
+  };
+
   // --- Render ---
   if (isLargeScreen) {
     return (
@@ -349,11 +348,25 @@ function PlanCarouselSection() {
                   <span className="text-gray-400 line-through text-base">₹{card.originalPrice}</span>
                   <span className="text-black font-semibold">Save <span className="text-green-700">₹{card.save}</span></span>
                 </div>
-                <button className="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold shadow hover:bg-green-700 transition-all">{card.button}</button>
+                <button
+                  className="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold shadow hover:bg-green-700 transition-all"
+                  onClick={() => handleBookNow(card.title)}
+                >
+                  Book Now
+                </button>
               </div>
             </div>
           ))}
         </div>
+      <BookingPopup
+        open={bookingPopupOpen}
+        onClose={() => {
+          setBookingPopupOpen(false);
+          setBookingService('');
+        }}
+        service={bookingService}
+        subCategory={''}
+      />
       </div>
     );
   }
@@ -389,7 +402,12 @@ function PlanCarouselSection() {
                     <span className="text-gray-400 line-through text-base">₹{card.originalPrice}</span>
                     <span className="text-black font-semibold">Save <span className="text-green-700">₹{card.save}</span></span>
                   </div>
-                  <button className="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold shadow hover:bg-green-700 transition-all">{card.button}</button>
+                  <button
+                    className="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold shadow hover:bg-green-700 transition-all"
+                    onClick={() => handleBookNow(card.title)}
+                  >
+                    Book Now
+                  </button>
                 </div>
               </div>
             ))}
@@ -407,6 +425,15 @@ function PlanCarouselSection() {
           />
         ))}
       </div>
+      <BookingPopup
+        open={bookingPopupOpen}
+        onClose={() => {
+          setBookingPopupOpen(false);
+          setBookingService('');
+        }}
+        service={bookingService}
+        subCategory={''}
+      />
     </div>
   );
 }

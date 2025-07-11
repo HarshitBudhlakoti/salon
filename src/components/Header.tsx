@@ -6,6 +6,7 @@ const links = [
   { id: 'our-services', label: 'Services' },
   { id: 'our-work', label: 'Our Work' },
   { id: 'contact', label: 'Connect' },
+  { id: 'download-menu', label: 'Download Menu', href: 'https://api.cloudinary.com/v1_1/dfm2w0hov/image/download?api_key=294196339567938&attachment=true&audit_context=eyJhY3Rvcl90eXBlIjoidXNlciIsImFjdG9yX2lkIjoiNTkzZmJjMTY0NGYwYjg3MWNlZmMwNTI5NmFhNmYwZGQiLCJ1c2VyX2V4dGVybmFsX2lkIjoiMGJjNmY0MjRkYWUyZjNhMTdiNjNlNGY3NzQwOTc4IiwidXNlcl9jdXN0b21faWQiOiJtb3ZpZWZyZWFrNjE0QGdtYWlsLmNvbSIsImNvbXBvbmVudCI6ImNvbnNvbGUifQ%3D%3D&public_id=menu_compressed_wzdukg&signature=558363fc7f98a4f230a2a35c60df0eb81a206a38&source=ml&target_filename=menu_compressed_wzdukg&timestamp=1752227357&type=upload', download: true },
 ];
 
 export default function Header() {
@@ -53,17 +54,32 @@ export default function Header() {
           {/* Desktop Links */}
           <div className="hidden md:flex gap-0 flex-1 justify-center">
             {links.map((link) => (
-              <motion.a
-                key={link.id}
-                onClick={() => handleClick(link.id)}
-                className={`cursor-pointer px-4 py-2 rounded-lg transition-colors duration-300 text-base text-green-700
-                  ${active === link.id ? 'bg-white/80 shadow-md' : ''}
-                  hover:text-green-800 hover:underline`}
-                whileTap={{ scale: 0.95 }}
-                whileHover={{ scale: 1.08 }}
-              >
-                {link.label}
-              </motion.a>
+              link.id === 'download-menu' ? (
+                <a
+                  key={link.id}
+                  href={link.href}
+                  download
+                  className="cursor-pointer px-4 py-2 rounded-lg transition-colors duration-300 text-base text-green-700 hover:text-green-800 hover:underline flex items-center gap-2 ml-2"
+                  style={{ fontWeight: 'bold' }}
+                >
+                  <span>{link.label}</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v12m0 0l-4-4m4 4l4-4m-8 8h8" />
+                  </svg>
+                </a>
+              ) : (
+                <motion.a
+                  key={link.id}
+                  onClick={() => handleClick(link.id)}
+                  className={`cursor-pointer px-4 py-2 rounded-lg transition-colors duration-300 text-base text-green-700
+                    ${active === link.id ? 'bg-white/80 shadow-md' : ''}
+                    hover:text-green-800 hover:underline`}
+                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ scale: 1.08 }}
+                >
+                  {link.label}
+                </motion.a>
+              )
             ))}
           </div>
           {/* Hamburger Icon for Mobile */}
@@ -89,14 +105,29 @@ export default function Header() {
                 className="absolute top-full right-2 mt-2 w-48 bg-white/95 rounded-lg shadow-lg flex flex-col py-2 z-50 md:hidden"
               >
                 {links.map((link) => (
-                  <button
-                    key={link.id}
-                    onClick={() => handleClick(link.id)}
-                    className={`text-left px-6 py-3 rounded-lg transition-colors duration-200 w-full text-base text-green-700
-                      ${active === link.id ? 'bg-yellow-100' : 'hover:bg-yellow-50'}`}
-                  >
-                    {link.label}
-                  </button>
+                  link.id === 'download-menu' ? (
+                    <a
+                      key={link.id}
+                      href={link.href}
+                      download
+                      className="text-left px-6 py-3 rounded-lg transition-colors duration-200 w-full text-base text-green-700 font-bold flex items-center gap-2"
+                      style={{ fontWeight: 'bold' }}
+                    >
+                      <span>{link.label}</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v12m0 0l-4-4m4 4l4-4m-8 8h8" />
+                      </svg>
+                    </a>
+                  ) : (
+                    <button
+                      key={link.id}
+                      onClick={() => handleClick(link.id)}
+                      className={`text-left px-6 py-3 rounded-lg transition-colors duration-200 w-full text-base text-green-700
+                        ${active === link.id ? 'bg-yellow-100' : 'hover:bg-yellow-50'}`}
+                    >
+                      {link.label}
+                    </button>
+                  )
                 ))}
               </motion.div>
             )}

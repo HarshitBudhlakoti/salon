@@ -47,11 +47,20 @@ export default function Home() {
 
   // Video hero refs and logic
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
   const handleLoadedMetadata = () => {
     if (videoRef.current) {
       videoRef.current.currentTime = 3;
     }
   };
+  useEffect(() => {
+    function handleResize() {
+      setIsMobile(window.innerWidth < 768);
+    }
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -69,7 +78,7 @@ export default function Home() {
       <div className="relative w-full h-[55vh] min-h-[200px] z-10 bg-white flex items-center justify-center">
         <video
           ref={videoRef}
-          src={videos.herovideo}
+          src={isMobile ? videos.herovideoMobile : videos.herovideoDesktop}
           autoPlay
           muted
           loop
