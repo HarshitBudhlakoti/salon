@@ -148,6 +148,13 @@ const Contact = () => {
   const subObj = subcategories.find((s) => s.name === selectedSub);
   const subsubcategories = subObj ? subObj.subsub : [];
 
+  // Helper to format date to DD/MM/YYYY
+  const formatDate = (dateStr: string) => {
+    if (!dateStr) return '';
+    const [year, month, day] = dateStr.split('-');
+    return `${day}/${month}/${year}`;
+  };
+
   // Handle form submit
   const API_URL = 'https://sheetdb.io/api/v1/i37y8wd3z7ewu';
   const handleSubmit = async (e: React.FormEvent) => {
@@ -159,7 +166,7 @@ const Contact = () => {
       phone,
       service: selectedService,
       subCategory: selectedSub,
-      date,
+      date: formatDate(date),
       timeSlot,
       hearAbout,
       specialRequest,

@@ -27,6 +27,13 @@ const hearAboutOptions = [
 
 const API_URL = 'https://sheetdb.io/api/v1/i37y8wd3z7ewu';
 
+// Helper to format date to DD/MM/YYYY
+const formatDate = (dateStr: string) => {
+  if (!dateStr) return '';
+  const [year, month, day] = dateStr.split('-');
+  return `${day}/${month}/${year}`;
+};
+
 const BookingPopup: React.FC<BookingPopupProps> = ({ open, onClose, service, subCategory }) => {
   const [step, setStep] = useState(1);
   const [name, setName] = useState('');
@@ -126,7 +133,7 @@ const BookingPopup: React.FC<BookingPopupProps> = ({ open, onClose, service, sub
     const data = {
       name,
       phone,
-      date,
+      date: formatDate(date),
       timeSlot,
       hearAbout,
       specialRequest,
