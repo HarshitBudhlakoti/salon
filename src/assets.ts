@@ -62,14 +62,14 @@ export const videos = {
         price: '₹899',
         originalPrice: '₹1499',
       },
-      {
-        key: 'refer',
-        video: 'https://res.cloudinary.com/dfm2w0hov/video/upload/v1752218096/efortless_2_i8rega.mp4',
-        thumbnail: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80',
-        title: 'Refer & Earn: 20% OFF',
-        price: '₹0',
-        originalPrice: '₹0',
-      },
+      // {
+      //   key: 'refer',
+      //   video: 'https://res.cloudinary.com/dfm2w0hov/video/upload/v1752218096/efortless_2_i8rega.mp4',
+      //   thumbnail: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80',
+      //   title: 'Refer & Earn: 20% OFF',
+      //   price: '₹0',
+      //   originalPrice: '₹0',
+      // },
     ],
     trendingServiceVideos: [
       {
